@@ -14,8 +14,8 @@ app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
 app.use("/",express.static("uploads"))
+app.use(bodyParser.json({ limit: "100mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "100mb" }));
-
 
 
 //config 
