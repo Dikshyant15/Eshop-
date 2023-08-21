@@ -1,37 +1,24 @@
-
-import { HiUserGroup,HiLibrary,HiShoppingBag,HiTicket,HiShoppingCart } from "react-icons/hi";
-
 // navigation Data
 export const navItems = [
     {
       title: "Home",
       url: "/",
-      icon:<HiLibrary></HiLibrary>
-
     },
     {
-      title: "Top Selling",
+      title: "Best Selling",
       url: "/best-selling",
-      icon:<HiShoppingBag></HiShoppingBag>
-
     },
     {
       title: "Products",
       url: "/products",
-      icon:<HiShoppingCart></HiShoppingCart>
-
     },
     {
       title: "Events",
       url: "/events",
-      icon:<HiTicket></HiTicket>
-
     },
     {
       title: "FAQ",
       url: "/faq",
-      icon:<HiUserGroup></HiUserGroup>
-
     },
   ];
   

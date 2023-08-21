@@ -1,8 +1,19 @@
 import React from 'react'
+import Header from "../components/Layout/Header"
+import Hero from "../components/Route/Hero/Hero"
+import Categories from '../components/Route/Categories/Categories'
+import Footer from "../components/Layout/Footer"
 
-function HomePage() {
+const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <div>
+      <Header activeHeading={1}/>
+      <Hero/>
+      <Categories/>
+      <Footer/>
+
+
+    </div>
   )
 }
 
