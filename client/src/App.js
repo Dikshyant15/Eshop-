@@ -4,6 +4,10 @@ import {LoginPage} from "./Routes.js"
 import {HomePage} from "./Routes.js"
 import {RegisterPage} from "./Routes.js"
 import {ActivationPage} from "./Routes.js"
+import {BestSelling} from "./Routes.js"
+import {Products} from "./Routes.js"
+import {EventsPage} from "./Routes.js"
+import {FAQPage} from "./Routes.js"
 import Store from "./redux/store.js";
 import { loadSeller, loadUser } from "./redux/actions/user";
 import { ToastContainer, toast } from "react-toastify";
@@ -35,7 +39,27 @@ const App = () => {
         path="/"
         element={<HomePage />}
       />
-
+      
+      <Route
+      path="/register-seller"
+      element={<BestSelling />}
+    />
+      <Route
+      path="/best-selling"
+      element={<BestSelling />}
+    />
+      <Route
+      path="/products"
+      element={<Products />}
+    />
+      <Route
+      path="/events"
+      element={<EventsPage />}
+    />
+      <Route
+      path="/faq"
+      element={<FAQPage />}
+    />
         
       </Routes>
       <ToastContainer

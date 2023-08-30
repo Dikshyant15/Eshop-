@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom'
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { useSelector } from "react-redux";
 
-const Header = ({activeHeading}) => {
+const Header = ({ activeHeading }) => {
     const { isAuthenticated, user } = useSelector((state) => state.user);
     const [searchInput, setSearchInput] = useState("")
     const [searchData, setSearchData] = useState(null)
@@ -79,9 +79,11 @@ const Header = ({activeHeading}) => {
                 </div>
 
                 <div className={`${styles.button}`}>
-                    <h1 className="text-[#fff] flex items-center">
-                        <IoIosArrowForward className="ml-1" />
-                    </h1>
+                    <Link to="/register-seller">
+                        <h1 className="text-[#fff] flex items-center">
+                            <IoIosArrowForward className="ml-1" />Become Seller
+                        </h1>
+                    </Link>
                 </div>
 
                 < div className={`${"shadow-sm fixed top-20 left-0 z-10"} transition hidden 800px:flex items-center justify-between w-full bg-gradient-to-r from-green-400 to-blue-500 h-[100px]`}>
@@ -122,7 +124,7 @@ const Header = ({activeHeading}) => {
                             >
                                 <AiOutlineHeart size={30} color="rgb(255 255 255 / 83%)" />
                                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                                     {/*wishlist && wishlist.length*/}
+                                    {/*wishlist && wishlist.length*/}
                                 </span>
                             </div>
                         </div>
@@ -163,8 +165,8 @@ const Header = ({activeHeading}) => {
                         </div>
                     </div>
 
-                  
-                   
+
+
 
                 </ div>
             </div>
