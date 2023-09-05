@@ -8,6 +8,7 @@ import {BestSelling} from "./Routes.js"
 import {Products} from "./Routes.js"
 import {EventsPage} from "./Routes.js"
 import {FAQPage} from "./Routes.js"
+import {ProfilePage} from "./Routes.js"
 import Store from "./redux/store.js";
 import { loadSeller, loadUser } from "./redux/actions/user";
 import { ToastContainer, toast } from "react-toastify";
@@ -59,6 +60,11 @@ const App = () => {
       <Route
       path="/faq"
       element={<FAQPage />}
+    />
+  
+      <Route
+      path="/profile"
+      element={<ProfilePage />}
     />
         
       </Routes>

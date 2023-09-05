@@ -13,6 +13,8 @@ import { categoriesData, productData } from "../../static/data";
 import { Link } from 'react-router-dom'
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { useSelector } from "react-redux";
+import UserCart from '../Cart/UserCart';
+import UserWishlist from '../Wishlist/UserWishlist';
 
 const Header = ({ activeHeading }) => {
     const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -165,6 +167,11 @@ const Header = ({ activeHeading }) => {
                         </div>
                     </div>
 
+                    {/*wishlist popup*/}
+                    {openWishlist ? <UserWishlist  setOpenWishlist = {setOpenWishlist}/> : null}
+                    
+                    {/*cart popup*/}
+                    {openCart ? <UserCart setOpenCart = {setOpenCart}/> : null}
 
 
 
