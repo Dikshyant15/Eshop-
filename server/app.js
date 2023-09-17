@@ -18,7 +18,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use("/",express.static("uploads"))
 app.use(bodyParser.json({ limit: "100mb" }));
-app.use(bodyParser.urlencoded({ extended: true, limit: "100mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "200mb" }));
 
 
 //config 
@@ -32,6 +32,10 @@ if(process.env.NODE_ENV !== "PRODUCTION"){
 const userRoute = require("./controllers/userController.js")
 
 app.use('/api/v2/user', userRoute)
+
+const shopRoute = require("./controllers/shopController.js")
+
+app.use('/api/v2/shop', shopRoute)
 
 
 //middlewares

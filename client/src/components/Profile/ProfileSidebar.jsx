@@ -20,6 +20,7 @@ const ProfileSidebar = ({ active ,setActive}) => {
     const logoutHandler =() =>{
         axios.post(`${server}/user/logout`,{withCredentials:true}).then((res)=>{
             toast.success(res.data.message)
+            // window.location.reload(true);
             navigate("/login")
 
         }).catch((error)=>{
@@ -29,7 +30,7 @@ const ProfileSidebar = ({ active ,setActive}) => {
         
     }
     return (
-        <div className='w-full  bg-gray-500 bg-opacity-75 shadow-sm rounded-[10px] p-4 pt-8'>
+        <div className='w-full  bg-blue-500 shadow-sm rounded-[40px] p-4 pt-8 border-black'>
             <div className='flex items-center w-full mb-8 cursor-pointer'>
                 <RxPerson size={20} color={active === 1 ? "red" : ""} />
                 <span

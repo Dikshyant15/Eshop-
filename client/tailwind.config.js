@@ -10,6 +10,11 @@ module.exports = {
         Poppins:["Poppins","sans-serif"],
       },
       extend: {
+        colors: {
+          // Replace these with your Coolors color codes
+          primary: '#00AFB9',
+          // Add more custom colors as needed
+        },
         screens:{
             "1000px":"1050px",
             "1100px":"1110px",

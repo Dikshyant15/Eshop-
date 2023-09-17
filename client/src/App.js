@@ -9,12 +9,16 @@ import {Products} from "./Routes.js"
 import {EventsPage} from "./Routes.js"
 import {FAQPage} from "./Routes.js"
 import {ProfilePage} from "./Routes.js"
+import {ShopCreatePage} from "./Routes.js"
+import {ShopLoginPage} from "./Routes.js"
 import Store from "./redux/store.js";
 import { loadSeller, loadUser } from "./redux/actions/user";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css"
 import axios from 'axios'
+import ProtectedRoute from './route/protectedRoute.js'
+import SellerActivationPage from './pages/SellerActivationPage.jsx'
 
 const App = () => {
   useEffect(
@@ -42,8 +46,16 @@ const App = () => {
       />
       
       <Route
+      path="shop/activation/:activation_token"
+      element={<SellerActivationPage />}
+    />
+      <Route
       path="/register-seller"
-      element={<BestSelling />}
+      element={<ShopCreatePage />}
+    />
+      <Route
+      path="/shop-login"
+      element={<ShopLoginPage />}
     />
       <Route
       path="/best-selling"
@@ -64,7 +76,7 @@ const App = () => {
   
       <Route
       path="/profile"
-      element={<ProfilePage />}
+      element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}
     />
         
       </Routes>

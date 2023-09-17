@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import Header from '../components/Layout/Header'
 import ProfileSidebar from '../components/Profile/ProfileSidebar'
 import styles from '../styles/styles'
+import ProfileContent from '../components/Profile/ProfileContent'
 
 const ProfilePage = () => {
     const [active, setActive] = useState(1);
@@ -12,6 +13,7 @@ const ProfilePage = () => {
                 <div className="w-[50px] 800px:w-[335px] sticky 800px:mt-16 mt-[18%]">
                 <ProfileSidebar  active={active} setActive={setActive}  />
                 </div>
+                <ProfileContent active = {active}/>
             </div>
         </div>
     )
