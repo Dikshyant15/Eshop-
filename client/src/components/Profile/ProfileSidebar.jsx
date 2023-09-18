@@ -30,8 +30,8 @@ const ProfileSidebar = ({ active ,setActive}) => {
         
     }
     return (
-        <div className='w-full  bg-blue-500 shadow-sm rounded-[40px] p-4 pt-8 border-black'>
-            <div className='flex items-center w-full mb-8 cursor-pointer'>
+        <div className='w-full shadow-sm rounded-[40px] p-4 pt-8 border-black'>
+            <div className='flex items-center w-full mb-8 cursor-pointer' onClick={() => setActive(1)} >
                 <RxPerson size={20} color={active === 1 ? "red" : ""} />
                 <span
                     className={`pl-3 ${active === 1 ? "text-[red]" : ""
@@ -41,20 +41,20 @@ const ProfileSidebar = ({ active ,setActive}) => {
                 </span>
             </div>
 
-            <div className='flex items-center w-full mb-8 cursor-pointer'>
+            <div className='flex items-center w-full mb-8 cursor-pointer' onClick={() => setActive(2)}>
                 <HiOutlineShoppingBag size={25} color={active === 2 ? "red" : ""} />
                 <span
-                    className={`pl-3 ${active === 1 ? "text-[red]" : ""
+                    className={`pl-3 ${active === 2 ? "text-[red]" : ""
                         } 800px:block hidden`}
                 >
                     Orders
                 </span>
             </div>
 
-            <div className='flex items-center w-full mb-8 cursor-pointer'>
-                <HiOutlineReceiptRefund size={25} color={active === 2 ? "red" : ""} />
+            <div className='flex items-center w-full mb-8 cursor-pointer' onClick={() => setActive(3)}>
+                <HiOutlineReceiptRefund size={25} color={active === 3 ? "red" : ""} />
                 <span
-                    className={`pl-3 ${active === 1 ? "text-[red]" : ""
+                    className={`pl-3 ${active === 3 ? "text-[red]" : ""
                         } 800px:block hidden`}
                 >
                     Refunds
@@ -117,9 +117,9 @@ const ProfileSidebar = ({ active ,setActive}) => {
             className="flex items-center cursor-pointer w-full mb-8"
             onClick={logoutHandler}
         >
-            <AiOutlineLogin size={20} color={active === 5 ? "red" : ""} />
+            <AiOutlineLogin size={20} color={ "red"} />
             <span
-                className={`pl-3 ${active === 5 ? "text-[red]" : ""
+                className={`pl-3 ${ "text-[red]" 
                     } 800px:block hidden`}
             >
                 Logout
