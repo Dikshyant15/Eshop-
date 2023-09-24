@@ -30,12 +30,12 @@ if(process.env.NODE_ENV !== "PRODUCTION"){
 
 //importing routes 
 const userRoute = require("./controllers/userController.js")
+const shopRoute = require("./controllers/shopController.js")
+const productRoute = require("./controllers/productController.js")
 
 app.use('/api/v2/user', userRoute)
-
-const shopRoute = require("./controllers/shopController.js")
-
 app.use('/api/v2/shop', shopRoute)
+app.use('/api/v2/product', productRoute)
 
 
 //middlewares

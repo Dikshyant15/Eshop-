@@ -20,7 +20,7 @@ const ProfileSidebar = ({ active ,setActive}) => {
     const logoutHandler =() =>{
         axios.post(`${server}/user/logout`,{withCredentials:true}).then((res)=>{
             toast.success(res.data.message)
-            // window.location.reload(true);
+             window.location.reload(true);
             navigate("/login")
 
         }).catch((error)=>{

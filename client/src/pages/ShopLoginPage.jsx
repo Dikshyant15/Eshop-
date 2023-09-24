@@ -1,13 +1,25 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../server";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const ShopLoginPage = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const navigate = useNavigate()
+
+    const { isSeller, isLoading } = useSelector((state) => state.seller);
+
+    useEffect(() => {
+        if (isSeller === true) {
+            navigate(`/shop-dashboard`);
+            // window.location.reload(true); 
+
+        }
+    }, [isLoading, isSeller])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,11 +28,13 @@ const ShopLoginPage = () => {
             .post(`${server}/shop/shop-login`, {
                 email,
                 password,
-            })
+            } ,{ withCredentials: true })
             .then((res) => {
-                toast.success(res.data.message);
-                setEmail("");
-                setPassword("");
+                toast.success("Login Successful");
+                navigate("/shop-dashboard")
+                window.location.reload(true); 
+
+                
             })
             .catch((error) => {
                 toast.error(error.response.data.message);

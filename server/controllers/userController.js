@@ -2,14 +2,17 @@ const express = require("express")
 const path = require("path")
 const router = express.Router()
 const jwt = require("jsonwebtoken")
+// const multer = require('multer');
 const { upload } = require("../multer")
+// const {uploadSingle} = multer({ dest: 'uploads/' });
 const ErrorHandler = require("../utils/ErrorHandler")
-const isAuthenticated = require("../Middlewares/auth")
+const {isAuthenticated} = require("../Middlewares/auth")
 const catchAsyncErrors = require("../Middlewares/catchAsyncErrors");
 const User = require("../models/Users")
 const sendMail = require("../utils/sendMail")
 const sendToken = require("../utils/jwtToken")
 const fs = require("fs")
+
 
 //registering a new user
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
