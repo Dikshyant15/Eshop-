@@ -4,15 +4,16 @@ import { server } from "../../server";
 // create product
 export const createProduct =
   (
-    name,
-    description,
-    category,
-    tags,
-    originalPrice,
-    discountPrice,
-    stock,
-    shopId,
-    images
+    newForm
+    // name,
+    // description,
+    // category,
+    // tags,
+    // price,
+    // dPrice,
+    // stock,
+    // shopId,
+    // images
   ) =>
   async (dispatch) => {
     try {
@@ -20,17 +21,21 @@ export const createProduct =
         type: "productCreateRequest",
       });
 
+      const config = {headers:{"Content-Type":"multipart/form-data"}}
+
       const { data } = await axios.post(
         `${server}/product/create-product`,
-        name,
-        description,
-        category,
-        tags,
-        originalPrice,
-        discountPrice,
-        stock,
-        shopId,
-        images,
+        newForm,
+        // name,
+        // description,
+        // category,
+        // tags,
+        // price,
+        // dPrice,
+        // stock,
+        // shopId,
+        // images,
+        config
       );
       dispatch({
         type: "productCreateSuccess",

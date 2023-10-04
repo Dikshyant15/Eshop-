@@ -7,18 +7,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { createProduct } from "../../redux/actions/product";
 
 
-const CreateProduct = () => {
+const CreateEvent = () => {
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [tags, setTags] = useState("")
     const [price, setPrice] = useState()
     const [dPrice, setDprice] = useState()
     const [stock, setStock] = useState()
-    const [images,setImages] = useState([])
-    const [category,setCategory] = useState("")
+    const [images, setImages] = useState([])
+    const [category, setCategory] = useState("")
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
-    const {seller} = useSelector((state)=>state.seller)
-    const {error,success} = useSelector((state)=>state.product)
+    const { seller } = useSelector((state) => state.seller)
+    const { error, success } = useSelector((state) => state.product)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -26,47 +28,47 @@ const CreateProduct = () => {
 
     useEffect(() => {
         if (error) {
-          toast.error(error);
+            toast.error(error);
         }
         if (success) {
-          toast.success("Product created successfully!");
-          navigate("/dashboard");
-          window.location.reload();
+            toast.success("Product created successfully!");
+            navigate("/dashboard");
+            window.location.reload();
         }
-      }, [dispatch, error, success]);
+    }, [dispatch, error, success]);
 
-    const handleImageChange = (e) =>{
+    const handleImageChange = (e) => {
         e.preventDefault()
         let files = Array.from(e.target.files)
         console.log(files)
-        setImages((prevImages)=>[...prevImages,...files])
+        setImages((prevImages) => [...prevImages, ...files])
     }
 
-    const handleSubmit = (e) =>{
-            e.preventDefault()
+    const handleSubmit = (e) => {
+        e.preventDefault()
 
-            const newForm = new FormData()
+        const newForm = new FormData()
 
 
-            newForm.append("name",name)
-            newForm.append("description",description)
-            newForm.append("tags",tags)
-            newForm.append("price",price)
-            newForm.append("dPrice",dPrice)
-            newForm.append("stock",stock)
-            newForm.append("category",category)
-            newForm.append("shopId",seller._id)
-            
-            images.forEach((image)=>{newForm.append("images", image)})
-            console.log(images)
+        newForm.append("name", name)
+        newForm.append("description", description)
+        newForm.append("tags", tags)
+        newForm.append("price", price)
+        newForm.append("dPrice", dPrice)
+        newForm.append("stock", stock)
+        newForm.append("category", category)
+        newForm.append("shopId", seller._id)
 
-            // dispatch(createProduct({name,description,tags,price,dPrice,stock,category,shopId:seller._id,images}))
-            dispatch(createProduct(newForm))
+        images.forEach((image) => { newForm.append("images", image) })
+        console.log(images)
+
+        // dispatch(createProduct({name,description,tags,price,dPrice,stock,category,shopId:seller._id,images}))
+        dispatch(createProduct(newForm))
 
     }
     return (
         <div className="w-[80%] ml-2 800px:w-[70%] bg-white  shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll mt-5 mr-10">
-            <h5 className="text-[30px] font-Poppins text-center">Create Product</h5>
+            <h5 className="text-[30px] font-Poppins text-center">Create Event</h5>
             <form onSubmit={handleSubmit} >
                 <br />
                 <div>
@@ -200,6 +202,38 @@ const CreateProduct = () => {
                     </div>
                     <br />
                     <div>
+                        <label className="pb-2">
+                            Event Start Date <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="date"
+                            name="price"
+                            id="start-date"
+                            value={startDate ? startDate.toISOString().slice(0, 10) : ""}
+                            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            // onChange={handleStartDateChange}
+                            // min={today}
+                            placeholder="Enter your event product stock..."
+                        />
+                    </div>
+                    <br />
+                    <div>
+                        <label className="pb-2">
+                            Event End Date <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="date"
+                            name="price"
+                            id="start-date"
+                            value={endDate ? endDate.toISOString().slice(0, 10) : ""}
+                            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            // onChange={handleEndDateChange}
+                            // min={minEndDate}
+                            placeholder="Enter your event product stock..."
+                        />
+                    </div>
+                    <br />
+                    <div>
                         <input
                             type="submit"
                             value="Create"
@@ -213,4 +247,4 @@ const CreateProduct = () => {
     )
 }
 
-export default CreateProduct
+export default CreateEvent

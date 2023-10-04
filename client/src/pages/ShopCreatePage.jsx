@@ -14,7 +14,7 @@ const ShopCreatePage = () => {
     const [phoneNumber, setPhoneNumber] = useState("")
     const [zipCode, setZipCode] = useState()
     const [password, setPassword] = useState("")
-    const [avatar, setAvatar] = useState()
+    const [avatar, setAvatar] = useState([])
 
     const navigate = useNavigate()
 

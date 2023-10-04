@@ -13,9 +13,9 @@ const Register = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [visible, setVisible] = useState(false)
-    const [avatar, setAvatar] = useState(null);
+    const [avatar, setAvatar] = useState([]);
 
-    console.log(avatar)
+    // console.log(avatar)
     const handleFileInputChange = (e) => {
         const file = e.target.files[0]
         setAvatar(file)
@@ -118,7 +118,7 @@ const Register = () => {
                                         <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
                                             {avatar ? (
                                                 <img
-                                                    src={avatar}
+                                                    src={avatar[0]}
                                                     alt="avatar"
                                                     className="h-full w-full object-cover rounded-full"
                                                 />
