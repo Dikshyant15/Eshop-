@@ -6,7 +6,7 @@ const catchAsyncErrors = require("../Middlewares/catchAsyncErrors");
 const Product = require("../models/Proucts")
 const Shop = require("../models/Shop")
 
-
+//create product 
 router.post("/create-product",upload.array("images"),catchAsyncErrors(async(req,res,next)=>{
     try {
         const shopId = req.body.shopId
@@ -39,8 +39,20 @@ router.post("/create-product",upload.array("images"),catchAsyncErrors(async(req,
         return next(new ErrorHandler(error.message, 400));
 
     }
+}))
 
+//load all products of a shop
+router.get("/get-shop-products/:id",catchAsyncErrors(async(req,res,next)=>{
+    try {
+        const shopId = req.params.id
+        const products = await Product.find({shopId:shopId})
 
+        res.status(200).json({success:true,products})
+        
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400));
 
+        
+    }
 }))
 module.exports = router 

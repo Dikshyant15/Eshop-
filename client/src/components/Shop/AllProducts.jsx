@@ -10,7 +10,16 @@ import { deleteProduct } from "../../redux/actions/product";
 
 
 const AllProducts = () => {
-  // const {products} = useSelector((state)=>state.products)
+  const { product } = useSelector((state) => state.product)
+  const { seller } = useSelector((state) => state.seller)
+  const dispatch = useDispatch()
+
+
+  useEffect(
+    () => {
+      dispatch(getAllProductsShop(seller._id))
+    }, [dispatch]
+  )
   const columns = [
     { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
     {
@@ -80,15 +89,30 @@ const AllProducts = () => {
 
   const rows = [];
 
+  {
+    product && product.forEach(element => {
+      rows.push(
+        {
+          id: element._id,
+          name: element.name,
+          price: "US$ " + element.discountPrice,
+          Stock: element.stock,
+          sold: element?.sold_out,
+        }
+      )
+
+    });
+  }
+
   return (
-    <div className= " w-full p-5">
-        <DataGrid 
+    <div className=" w-full p-5">
+      <DataGrid
         rows={rows}
         columns={columns}
         pageSize={10}
         disableSelectionOnClick
         autoHeight
-        />
+      />
     </div>
   )
 }
