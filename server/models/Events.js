@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const eventSchema = new mongoose.Schema({
-    name:{
+    eventName:{
         type: String,
         required:[true,"Please enter your event product name!"],
     },
@@ -17,7 +17,7 @@ const eventSchema = new mongoose.Schema({
         type: Date,
         required: true,
       },
-      Finish_Date: {
+    finish_Date: {
         type: Date,
         required: true,
       },

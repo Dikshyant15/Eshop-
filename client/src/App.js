@@ -21,7 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css"
 import axios from 'axios'
 import ProtectedRoute from './route/protectedRoute.js'
-import { AllProductPage, CreateEventsPage, ShopDashboardPage } from './route/ShopRoute.js'
+import { AllProductPage, CreateEventsPage, ShopDashboardPage,AllEventPage } from './route/ShopRoute.js'
 import { ShopHomePage } from './ShopRoute.js'
 import SellerProtectedRoute from './route/SellerProtectedRoute.js'
 import CreateProductPage from './pages/Shop/CreateProductPage.jsx';
@@ -114,6 +114,10 @@ const App = () => {
     path="/dashboard-create-event"
     element={<SellerProtectedRoute><CreateEventsPage/></SellerProtectedRoute>}
   />
+  <Route
+  path="/dashboard-events"
+  element={<SellerProtectedRoute><AllEventPage/></SellerProtectedRoute>}
+/>
         
       </Routes>
       <ToastContainer

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../../static/data";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { createProduct } from "../../redux/actions/product";
+import { createEvent } from "../../redux/actions/event";
 
 
 const CreateEvent = () => {
@@ -37,12 +37,39 @@ const CreateEvent = () => {
         }
     }, [dispatch, error, success]);
 
+    //handle image change 
     const handleImageChange = (e) => {
         e.preventDefault()
         let files = Array.from(e.target.files)
         console.log(files)
         setImages((prevImages) => [...prevImages, ...files])
     }
+
+    //handle start date change
+    const handleStartDate = (e) => {
+        const startDate = new Date(e.target.value)
+        const minEndDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
+
+        setStartDate(startDate)
+        setEndDate(null)
+        document.getElementById("end-date").min = minEndDate.toISOString().slice(
+            0,
+            10
+        );
+    }
+    //handle end date change
+    const handleEndDateChange = (e) => {
+        const endDate = new Date(e.target.value);
+        setEndDate(endDate);
+    };
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    const minEndDate = startDate
+        ? new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000)
+            .toISOString()
+            .slice(0, 10)
+        : "";
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -58,12 +85,14 @@ const CreateEvent = () => {
         newForm.append("stock", stock)
         newForm.append("category", category)
         newForm.append("shopId", seller._id)
+        newForm.append("startDate",startDate )
+        newForm.append("endDate", endDate)
 
         images.forEach((image) => { newForm.append("images", image) })
         console.log(images)
 
         // dispatch(createProduct({name,description,tags,price,dPrice,stock,category,shopId:seller._id,images}))
-        dispatch(createProduct(newForm))
+        dispatch(createEvent(newForm))
 
     }
     return (
@@ -193,8 +222,7 @@ const CreateEvent = () => {
                             images.map((i) => (
                                 <img
                                     src={URL.createObjectURL(i)}
-                                    key={i.lastModified
-                                    }
+                                    key={i.lastModified}
                                     alt=""
                                     className="h-[120px] w-[120px] object-cover m-2"
                                 />
@@ -211,8 +239,8 @@ const CreateEvent = () => {
                             id="start-date"
                             value={startDate ? startDate.toISOString().slice(0, 10) : ""}
                             className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            // onChange={handleStartDateChange}
-                            // min={today}
+                            onChange={handleStartDate}
+                            min={today}
                             placeholder="Enter your event product stock..."
                         />
                     </div>
@@ -224,11 +252,11 @@ const CreateEvent = () => {
                         <input
                             type="date"
                             name="price"
-                            id="start-date"
+                            id="end-date"
                             value={endDate ? endDate.toISOString().slice(0, 10) : ""}
                             className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            // onChange={handleEndDateChange}
-                            // min={minEndDate}
+                            onChange={handleEndDateChange}
+                            min={minEndDate}
                             placeholder="Enter your event product stock..."
                         />
                     </div>
