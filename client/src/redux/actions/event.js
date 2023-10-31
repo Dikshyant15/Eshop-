@@ -49,3 +49,19 @@ export const createEvent =
     }
   };
 
+
+  //get shop event by id 
+  export const getAllEventsShop = (id) => async (dispatch) =>{
+    try {
+      dispatch({type: "getAllEventRequest"})
+
+      const { data } = await axios.get(`${server}/event/get-shop-events/${id}`)
+      dispatch({type:"getAllEventRequestSuccess",payload:data.events})      
+    } catch (error) {
+      dispatch({type:"getAllEventRequestFail",payload:error.response.data.message})      
+
+    }
+
+
+  }
+

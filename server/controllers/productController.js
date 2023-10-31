@@ -41,11 +41,24 @@ router.post("/create-product",upload.array("images"),catchAsyncErrors(async(req,
     }
 }))
 
-//load all products of a shop
+//load all products of a specific shop
 router.get("/get-shop-products/:id",catchAsyncErrors(async(req,res,next)=>{
     try {
         const shopId = req.params.id
         const products = await Product.find({shopId:shopId})
+
+        res.status(200).json({success:true,products})
+        
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400));
+
+        
+    }
+}))
+//load all products 
+router.get("/get-all-products",catchAsyncErrors(async(req,res,next)=>{
+    try {
+        const products = await Product.find()
 
         res.status(200).json({success:true,products})
         

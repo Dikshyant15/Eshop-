@@ -4,28 +4,29 @@ import React, { useEffect } from "react";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAllProductsShop } from "../../redux/actions/product";
-import { deleteProduct } from "../../redux/actions/product";
+import { getAllEventsShop } from "../../redux/actions/event";
+// import { deleteProduct } from "../../redux/actions/product";
 // import Loader from "../Layout/Loader";
 
 
-const AllProducts = () => {
-  const { product } = useSelector((state) => state.product)
+const AllEvents = () => {
+  const { event } = useSelector((state) => state.event)
   const { seller } = useSelector((state) => state.seller)
+
   const dispatch = useDispatch()
 
-
   useEffect(
-    () => {
-      dispatch(getAllProductsShop(seller._id))
-    }, [dispatch]
+    ()=>{
+      dispatch(getAllEventsShop(seller._id))
+
+    }
   )
   const columns = [
-    { field: "id", headerName: "Product Id", minWidth: 220, flex: 0.6 },
+    { field: "id", headerName: "Order Id", minWidth: 220, flex: 0.7 },
     {
       field: "name",
-      headerName: "Name",
-      minWidth: 120,
+      headerName: "Order Name",
+      minWidth: 180,
       flex: 0.6,
     },
     {
@@ -35,11 +36,11 @@ const AllProducts = () => {
       flex: 0.6,
     },
     {
-      field: "Stock",
+      field: "stock",
       headerName: "Stock",
       type: "number",
       minWidth: 80,
-      flex: 0.6,
+      flex: 0.5,
     },
 
     {
@@ -50,8 +51,22 @@ const AllProducts = () => {
       flex: 0.6,
     },
     {
-      field: "Preview",
+      field: "startDate",
+      headerName: "Event Start Date",
+      type: "number",
+      minWidth: 200,
       flex: 0.6,
+    },
+    {
+      field: "endDate",
+      headerName: "Event End Date",
+      type: "number",
+      minWidth: 200,
+      flex: 0.6,
+    },
+    {
+      field: "Preview",
+      flex: 0.8,
       minWidth: 100,
       headerName: "",
       type: "number",
@@ -70,7 +85,7 @@ const AllProducts = () => {
     },
     {
       field: "Delete",
-      flex: 0.6,
+      flex: 0.8,
       minWidth: 120,
       headerName: "",
       type: "number",
@@ -87,19 +102,22 @@ const AllProducts = () => {
     },
   ];
 
+
   const rows = [];
 
   {
-    product && product.forEach(element => {
-      rows.push(
-        {
-          id: element._id,
-          name: element.productName,
-          price: "US$ " + element.discountPrice,
-          Stock: element.stock,
-          sold: element?.sold_out,
-        }
+    event && event.forEach(element => {
+      rows.push({
+        id: element._id,
+        name: element.eventName,
+        price: element.originalPrice,
+        stock: element.stock,
+        sold: element.sold_out,
+        startDate: element.start_Date,
+        endDate: element.finish_Date
+      }
       )
+
 
     });
   }
@@ -117,4 +135,4 @@ const AllProducts = () => {
   )
 }
 
-export default AllProducts
+export default AllEvents

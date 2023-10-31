@@ -4,20 +4,30 @@ import React, { useEffect } from "react";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-// import { getAllProductsShop } from "../../redux/actions/product";
+import { getAllEventsShop } from "../../redux/actions/event";
 // import { deleteProduct } from "../../redux/actions/product";
 // import Loader from "../Layout/Loader";
 
 
 const AllEvents = () => {
-  // const {products} = useSelector((state)=>state.products)
+  const { event } = useSelector((state) => state.event)
+  const { seller } = useSelector((state) => state.seller)
+
+  const dispatch = useDispatch()
+
+  useEffect(
+    ()=>{
+      dispatch(getAllEventsShop(seller._id))
+
+    }
+  )
   const columns = [
-    { field: "id", headerName: "Event Id", minWidth: 150, flex: 0.7 },
+    { field: "id", headerName: "Event Id", minWidth: 220, flex: 0.7 },
     {
       field: "name",
       headerName: "Event Name",
       minWidth: 180,
-      flex: 1.4,
+      flex: 0.6,
     },
     {
       field: "price",
@@ -26,7 +36,7 @@ const AllEvents = () => {
       flex: 0.6,
     },
     {
-      field: "Stock",
+      field: "stock",
       headerName: "Stock",
       type: "number",
       minWidth: 80,
@@ -44,14 +54,14 @@ const AllEvents = () => {
       field: "startDate",
       headerName: "Event Start Date",
       type: "number",
-      minWidth: 130,
+      minWidth: 200,
       flex: 0.6,
     },
     {
       field: "endDate",
       headerName: "Event End Date",
       type: "number",
-      minWidth: 130,
+      minWidth: 200,
       flex: 0.6,
     },
     {
@@ -92,17 +102,35 @@ const AllEvents = () => {
     },
   ];
 
+
   const rows = [];
 
+  {
+    event && event.forEach(element => {
+      rows.push({
+        id: element._id,
+        name: element.eventName,
+        price: element.originalPrice,
+        stock: element.stock,
+        sold: element.sold_out,
+        startDate: element.start_Date,
+        endDate: element.finish_Date
+      }
+      )
+
+
+    });
+  }
+
   return (
-    <div className= " w-full p-5">
-        <DataGrid 
+    <div className=" w-full p-5">
+      <DataGrid
         rows={rows}
         columns={columns}
         pageSize={10}
         disableSelectionOnClick
         autoHeight
-        />
+      />
     </div>
   )
 }
