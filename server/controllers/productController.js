@@ -3,7 +3,7 @@ const router = express.Router()
 const {upload} = require("../multer")
 const ErrorHandler = require("../utils/ErrorHandler")
 const catchAsyncErrors = require("../Middlewares/catchAsyncErrors");
-const Product = require("../models/Proucts")
+const Product = require("../models/Products")
 const Shop = require("../models/Shop")
 
 //create product 
@@ -61,6 +61,7 @@ router.get("/get-all-products",catchAsyncErrors(async(req,res,next)=>{
         const products = await Product.find()
 
         res.status(200).json({success:true,products})
+        console.log(products)
         
     } catch (error) {
         return next(new ErrorHandler(error.message, 400));

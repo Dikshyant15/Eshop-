@@ -11,10 +11,13 @@ EventsPage,
 FAQPage, 
 ProfilePage,
 ShopCreatePage, 
-ShopLoginPage} from "./route/Routes.js"
+ShopLoginPage,
+ProductDetailPage,
+ShopPreviewPage} from "./route/Routes.js"
 import Store from "./redux/store.js";
 import {  loadUser } from "./redux/actions/user";
 import { loadSeller } from "./redux/actions/seller";
+import { getAllProducts } from "./redux/actions/product";
 import { useSelector } from 'react-redux'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,6 +36,7 @@ const App = () => {
     ()=>{
       Store.dispatch(loadUser())
       Store.dispatch(loadSeller())
+      Store.dispatch(getAllProducts())
 
       //  if(isSeller === true){return <Navigate to="/shop-home-page"/>}
     //   axios.get("`{server}/user/getUser",{withCredentials:true}).then((res)=>{
@@ -73,6 +77,7 @@ const App = () => {
       path="/faq"
       element={<FAQPage />}
     />
+    <Route path="/product/:id" element={<ProductDetailPage />} />
   
       <Route
       path="/profile"
@@ -121,6 +126,10 @@ const App = () => {
   <Route
   path="/dashboard-orders"
   element={<SellerProtectedRoute><AllOrderPage/></SellerProtectedRoute>}
+/>
+  <Route
+  path="/shop/preview/:id"
+  element={<SellerProtectedRoute><ShopPreviewPage/></SellerProtectedRoute>}
 />
         
       </Routes>

@@ -2,8 +2,10 @@ import React from 'react'
 import styles from "../../styles/styles";
 import {Link} from "react-router-dom"
 import { productData } from '../../static/data'
+import { useSelector } from 'react-redux';
 
 const EventCard = () => {
+  
     return (
         <div
             className={`w-full block bg-white rounded-lg lg:flex p-2`}

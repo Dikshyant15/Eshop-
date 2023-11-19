@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from "../../../styles/styles";
 import Card from "../ProductCard/Card"
 import { productData } from '../../../static/data'
+import { useSelector } from 'react-redux';
 
 
 
 const FeaturedProduct = () => {
+  const { allProducts } = useSelector((state) => state.product)
+
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    setData(allProducts)
+  },[])
+  console.log(data)
+
+
   return (
     <div>
       <div className={`${styles.section} hidden sm:block`}>
@@ -17,9 +28,9 @@ const FeaturedProduct = () => {
         >
 
           < div className="grid grid-cols-1 gap-[5px] md:grid-cols-2 md:gap-[10px] lg:grid-cols-4 lg:gap-[20px] xl:grid-cols-5 xl:gap-[30px]" >
-            {productData.map((product, index) =>
+            {data && data.map((i, index) =>
             (
-              <Card key={index} data={product} />
+              <Card key={index} data={i} />
 
             )
             )}

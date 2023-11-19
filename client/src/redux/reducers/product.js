@@ -4,6 +4,7 @@ import { createReducer } from "@reduxjs/toolkit";
 const initialState = {
     isLoading: true,
     product: null,
+    allProducts:null,
     error:null,
     success:false
 }

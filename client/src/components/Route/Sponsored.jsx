@@ -7,7 +7,7 @@ const Sponsored = () => {
     <>
       <div className={`${styles.section} hidden sm:block`}>
         <div className={`${styles.normalFlex} text-orange-500 text-4xl mb-10`} >
-          Featured Product
+          Sponsored Brand
         </ div>
       </div>
       <div
