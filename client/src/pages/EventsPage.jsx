@@ -2,9 +2,12 @@ import React from "react";
 import EventCard from "../components/Events/EventCard";
 import Header from "../components/Layout/Header";
 import styles from "../styles/styles"
+import { useSelector } from "react-redux";
 // import Loader from "../components/Layout/Loader";
 
 const EventsPage = () => {
+  const { allEvent } = useSelector((state) => state.event)
+
   return (
     <>
       <Header activeHeading={4} />
@@ -14,7 +17,7 @@ const EventsPage = () => {
       </ div>
 
       <div className="mt-2 flex p-5">
-        <EventCard active={true} />
+        <EventCard active={true} data={allEvent && allEvent[0]} />
       </div>
     </>
   );

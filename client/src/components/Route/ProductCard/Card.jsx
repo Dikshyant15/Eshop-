@@ -21,7 +21,13 @@ const Card = ({ data }) => {
     const removefromWishlist = () => {
         setClick(!click)
     }
-    console.log(click)
+    // console.log(click)
+
+    //cart details stored in local storage
+    const addtoCartHandler = (id) =>{
+        console.log(id)
+        
+    }
     return (
         <div class="max-w-sm rounded overflow-hidden shadow-lg border-orange-500 border-2 mt-20">
             <img src={data.images && data.images[0]?.url} className="w-full h-[170px] object-contain" />
@@ -52,7 +58,7 @@ const Card = ({ data }) => {
                 <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 cursor-pointer "><AiFillStar /></span>
                 <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 cursor-pointer"><AiOutlineStar /></span>
                 <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 cursor-pointer"><AiOutlineEye title="Quick View" onClick={() => setOpen(!open)} /></span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 cursor-pointer"><AiOutlineShoppingCart title="Add to cart" /></span>
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 cursor-pointer"><AiOutlineShoppingCart title="Add to cart" onClick={()=>addtoCartHandler(data._id)} /></span>
             </div>
             {open ? <ProductCardDetails setOpen={setOpen} data={data} /> : null}
         </div >

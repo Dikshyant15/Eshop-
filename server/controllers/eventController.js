@@ -57,4 +57,18 @@ router.get("/get-shop-events/:id",catchAsyncErrors(async(req,res,next)=>{
         
     }
 }))
+//get all events registered 
+router.get("/get-all-events",catchAsyncErrors(async(req,res,next)=>{
+    try {
+        const allEvents = await Event.find()
+
+        res.status(200).json({success:true,allEvents})
+        console.log(allEvents)
+        
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400));
+
+        
+    }
+}))
 module.exports = router

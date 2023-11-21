@@ -61,7 +61,18 @@ export const createEvent =
       dispatch({type:"getAllEventRequestFail",payload:error.response.data.message})      
 
     }
-
-
   }
 
+  //get all events registered 
+  export const getAllEvents = () =>async(dispatch)=>{
+    try {
+      dispatch({type: "getAllEventsRequest"})
+      const { data } = await axios.get(`${server}/event/get-all-events`)
+      dispatch({type:"getAllEventsSuccess",payload:data.allEvents})      
+
+    } catch (error) {
+      dispatch({type:"getAllEventsFailed",payload:error.response.data.message})      
+
+    }
+
+  }

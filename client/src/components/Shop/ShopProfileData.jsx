@@ -3,23 +3,26 @@ import styles from "../../styles/styles";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProductsShop } from '../../redux/actions/product';
+import { getAllEventsShop } from '../../redux/actions/event';
 import Card from '../Route/ProductCard/Card'
+
 
 
 const ShopProfileData = ({ isOwner }) => {
   const [active, setActive] = useState(1)
 
   const { product } = useSelector((state) => state.product)
-  const { events } = useSelector((state) => state.event)
+  const { event } = useSelector((state) => state.event)
   const { id } = useParams()
   const dispatch = useDispatch()
 
 
   useEffect(() => {
-    getAllProductsShop(id)
+    dispatch(getAllProductsShop(id))
+    dispatch(getAllEventsShop(id))
   }, [dispatch])
 
-  console.log(product)
+  console.log(event)
 
   return (
     <div className="w-full">
@@ -67,6 +70,19 @@ const ShopProfileData = ({ isOwner }) => {
       {active === 1 && (<div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[22px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
         {product &&
           product.map((i, index) => (<Card data={i} key={index} />))}
+      </div>)}
+
+
+      {active === 2 && (<div className="grid grid-cols-1 gap-[20px] mt-5 md:grid-cols-2 md:gap-[22px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
+        {event &&
+          event.map((i, index) => (<Card data={i} key={index} isShop={true}
+            isEvent={true} />))}
+
+            {event && event.length === 0 && (
+              <h5 className="w-full text-center py-5 text-[18px]">
+                No Events have for this shop!
+              </h5>
+            )}
       </div>)}
     </div>
   );

@@ -28,6 +28,7 @@ import { AllProductPage, CreateEventsPage, ShopDashboardPage,AllEventPage,AllOrd
 import { ShopHomePage } from './ShopRoute.js'
 import SellerProtectedRoute from './route/SellerProtectedRoute.js'
 import CreateProductPage from './pages/Shop/CreateProductPage.jsx';
+import { getAllEvents } from './redux/actions/event.js';
 
 const App = () => {
   // const {isSeller} = useSelector((state)=>state.seller)
@@ -37,6 +38,7 @@ const App = () => {
       Store.dispatch(loadUser())
       Store.dispatch(loadSeller())
       Store.dispatch(getAllProducts())
+      Store.dispatch(getAllEvents())
 
       //  if(isSeller === true){return <Navigate to="/shop-home-page"/>}
     //   axios.get("`{server}/user/getUser",{withCredentials:true}).then((res)=>{
