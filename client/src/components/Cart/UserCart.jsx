@@ -22,17 +22,23 @@ const UserCart = ({ setOpenCart }) => {
     addToCart(data)
   }
 
+  const totalPrice = cart.reduce(
+    (acc, item) => acc + item.qty * item.discountPrice,
+    0
+  );
+
+
 
 
   return (
     <div className="fixed top-0 left-0 w-full  bg-[#0000004b] h-screen z-10">
-      <div className=" fixed top-0 left-0 w-[80%] 800px:w-[35%] bg-white flex flex-col overflow-y-scroll justify-between shadow-sm">
+      <div className=" fixed top-0 left-0 w-[80%] 800px:w-[30%] bg-white flex flex-col overflow-y-scroll justify-between shadow-sm">
         <div className='flex justify-center text-6xl mt-5 font-Poppins font-bold italic underline text-blue-800 decoration-solid'>
           <h3>My cart </h3>
         </div>
-        {cart && cart.length === 0 ?
+        {cart && cart.length === 0 ? (
           <div className="w-full h-screen flex items-center justify-center">
-            <div className="flex w-full justify-end pt-5 pr-5 fixed top-3 right-3">
+            <div className="flex w-full justify-end pt-5  fixed top-3 right-3  ">
               <RxCross1
                 size={25}
                 className="cursor-pointer"
@@ -41,32 +47,50 @@ const UserCart = ({ setOpenCart }) => {
             </div>
             <h5>Cart Items is empty!</h5>
           </div>
-          :
-          <div>
-            <div className="flex w-full justify-end pt-5 pr-5">
-              <RxCross1
-                size={30}
-                className="cursor-pointer"
-                onClick={() => setOpenCart(false)}
-              />
-            </div>
-            {/* Item length */}
-            <div className={`flex p-4`}>
-              <IoBagHandleOutline size={25} />
-              <h5 className="pl-2 text-[20px] font-[500]">
-                {cart && cart.length} items
-              </h5>
+        ) : (
+          <>
+            <div>
+              <div className="flex w-full justify-end pt-5 pr-5">
+                <RxCross1
+                  size={30}
+                  className="cursor-pointer"
+                  onClick={() => setOpenCart(false)}
+                />
+              </div>
+              {/* Item length */}
+              <div className={`flex p-4`}>
+                <IoBagHandleOutline size={25} />
+                <h5 className="pl-2 text-[20px] font-[500]">
+                  {cart && cart.length} items
+                </h5>
+              </div>
+
+              <br />
+              <div className="w-full border-t">
+                {cart && cart.map((i, id) =>
+                (
+                  <CartSingleCard totalPrice={totalPrice} key={id} data={i} removeFromCartHandler={removeFromCartHandler} quantityChangeHandler={quantityChangeHandler} />
+                ))}
+              </div>
             </div>
 
-            {cart && cart.map((i, id) =>
-            (
-              <CartSingleCard key={id} data={i} removeFromCartHandler={removeFromCartHandler} quantityChangeHandler={quantityChangeHandler} />
-            )
-            )}
-          </div>
+            <div className="px-5 mb-3">
+              {/* checkout buttons */}
+              <Link to="/checkout">
+                <div
+                  className={`h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]`}
+                >
+                  <h1 className="text-[#fff] text-[18px] font-[600]">
+                    Checkout Now (USD${totalPrice})
+                  </h1>
+                </div>
+              </Link>
+            </div>
+          </>
+        )
         }
       </div>
-    </div>
+    </div >
   )
 }
 
@@ -74,6 +98,7 @@ const CartSingleCard = ({ data, removeFromCartHandler, quantityChangeHandler }) 
   // const [increment, setIncrement] = useState(data.total_sell)
   // const [decrement, setDecrement] = useState(data.total_sell)
   const [value, setValue] = useState(data.qty)
+
   const totalPrice = data.discountPrice * value
 
   const incrementHandler = (data) => {
@@ -119,7 +144,8 @@ const CartSingleCard = ({ data, removeFromCartHandler, quantityChangeHandler }) 
           src={`${data?.images[0]?.url}`}
           alt=""
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
-  />*/}
+           />
+        */}
         <div className="pl-[15px]">
           <b className='text-[17px]'>{data?.productName}</b>
           <h4 className="font-[400] text-[15px] text-[#00000082]">
