@@ -71,4 +71,17 @@ router.get("/get-all-events",catchAsyncErrors(async(req,res,next)=>{
         
     }
 }))
+
+//for admin -get all events 
+router.get("/admin-get-all-events",catchAsyncErrors(async(req,res,next)=>{
+    try {
+        const adminAllEvents = await Event.find()
+        res.status(200).json({sucess:true, adminAllEvents})
+        
+    } catch (error) {
+        return next(new ErrorHandler(error.message,400))
+        
+    }
+   
+}))
 module.exports = router

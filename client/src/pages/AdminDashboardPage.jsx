@@ -11,7 +11,7 @@ const AdminDashboardPage = () => {
       <AdminHeader />
       <div className="w-full flex">
         <div className="flex items-start justify-between w-full">
-          <div className="w-[80px] 800px:w-[330px] mt-5">
+          <div className="w-[80px] 800px:w-[220px] mt-5">
             <AdminSidebar active={active} setActive={setActive} />
           </div>
           <AdminDashboardMain active={active} />
