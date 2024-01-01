@@ -1,47 +1,66 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import { AiOutlineEye } from "react-icons/ai";
 import { Button } from '@mui/material';
+import axios from 'axios';
+import { server } from '../../server';
 
 
 const AllProduct = () => {
+  const [data,setData] = useState([])
   const row = []
 
+  
+  useEffect(()=>{
+    axios.get(`${server}/product/admin-get-all-product`,{withCredentials:true}).then((res)=>{
+      setData(res.data.adminAllProduct)
+    })
+  },[])
+
+  {data.forEach((item)=>{
+    row.push({
+      id:item._id,
+      name:item.productName,
+      price:item.discountPrice,
+      stock:item.stock,
+      sold:item.sold_out
+    })})}
+  
+
   const column = [
-    { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
+    { field: "id", headerName: "Product Id", minWidth: 100, flex: 0.1 },
     {
       field: "name",
       headerName: "Name",
-      minWidth: 180,
-      flex: 1.4,
+      minWidth: 100,
+      flex: 0.1,
     },
     {
       field: "price",
       headerName: "Price",
       minWidth: 100,
-      flex: 0.6,
+      flex: 0.1,
     },
     {
-      field: "Stock",
+      field: "stock",
       headerName: "Stock",
       type: "number",
-      minWidth: 80,
-      flex: 0.5,
+      minWidth: 100,
+      flex: 0.1,
     },
 
     {
       field: "sold",
       headerName: "Sold out",
       type: "number",
-      minWidth: 130,
-      flex: 0.6,
+      minWidth: 100,
+      flex: 0.1,
     },
     {
       field: "Preview",
-      flex: 0.8,
-      minWidth: 100,
-      headerName: "",
+      headerName: "Preview Product",
+      minWidth:100 ,
       type: "number",
       sortable: false,
       renderCell: (params) => {

@@ -257,5 +257,19 @@ router.put(
     }))
 
 
+//admin get all users
+router.get("/admin-get-all-user",catchAsyncErrors(async(req,res,next)=>{
+    try {
+        const adminAllUser = await User.find()
+
+        res.status(200).json({success:true,adminAllUser})
+        
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400));
+
+    }
+}))
+
+
 
 module.exports = router;

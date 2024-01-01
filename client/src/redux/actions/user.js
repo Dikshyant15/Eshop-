@@ -45,4 +45,27 @@ export const updateUserInformation = (name, email, phoneNumber, password) => asy
   }
 }
 
+//admin get all users
+export const adminGetAllUsers = () => async (dispatch)=>{
+  try {
+    dispatch ({
+      type: "getAllUsersRequest"
+    })
+
+    const {data} = await axios.get(`${server}/user/admin-get-all-user`, { withCredentials: true })
+    dispatch ({
+      type : "getAllUsersSuccess",
+      payload: data.adminAllUser
+    })
+
+    
+  } catch (error) {
+    dispatch({
+      type: "getAllUsersFailed",
+      payload: error.response.data.message,
+    });
+  }
+
+}
+
 

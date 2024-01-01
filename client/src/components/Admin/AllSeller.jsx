@@ -1,14 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState} from 'react'
 import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import { AiOutlineEye } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 import { Button } from '@mui/material';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllSellersAdmin } from '../../redux/actions/seller';
 
 
 
 const AllSeller = () => {
+  const dispatch = useDispatch()
+  const {sellers} = useSelector((state)=>state.seller)
   const row = []
+  
+  useEffect(()=>{
+    dispatch(getAllSellersAdmin())
+   
+    }
+  ,[dispatch])
+
+
+  {sellers && sellers.forEach((item)=>{
+    row.push({
+      id:item._id,
+      name:item.name,
+      email:item.email,
+      address:item.address,
+      joinedAt:item.createdAt
+    })
+    
+
+  })}
   const column = [
     { field: "id", headerName: "Seller ID", minWidth: 140 },
 

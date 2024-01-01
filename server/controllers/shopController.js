@@ -230,6 +230,17 @@ router.post('/logout',catchAsyncErrors(async(req,res,next)=>{
   }
 }))
 
+//admin get all seller
+router.get("/admin-get-all-seller",catchAsyncErrors(async(req,res,next)=>{
+  try {
+    const adminAllSeller = await Shop.find()
+    res.status(200).json({success:true, adminAllSeller})
+    
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+}))
+
 module.exports = router
 
 

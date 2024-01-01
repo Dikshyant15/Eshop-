@@ -6,6 +6,8 @@ const initialState = {
     user: null,
     loading: false,
     error: null,
+    usersLoading: false,
+    users: null
 }
 
 //load users
@@ -34,5 +36,24 @@ export const userReducer = createReducer(initialState, {
     updateUserInfoFailed: (state, action) => {
         state.loading = false;
         state.error = action.payload;
+    },
+
+    //admin get all users
+    getAllUsersRequest: (state) => {
+        state.usersLoading = true;
+    },
+    getAllUsersSuccess: (state, action) => {
+        state.usersLoading = false;
+        state.users = action.payload;
+    },
+    getAllUsersFailed: (state, action) => {
+        state.usersLoading = false;
+        state.error = action.payload;
+    },
+    clearErrors: (state) => {
+        state.error = null;
+    },
+    clearMessages: (state) => {
+        state.successMessage = null;
     },
 })

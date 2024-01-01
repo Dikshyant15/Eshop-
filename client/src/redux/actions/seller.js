@@ -21,3 +21,23 @@ export const loadSeller = () => async (dispatch) => {
       });
     }
   };
+
+  //admin get all sellers
+  export const getAllSellersAdmin = () => async(dispatch) =>{
+    try {
+      dispatch({
+        type: "getAllSellersRequest"
+      })
+      const {data} = await axios.get(`${server}/shop/admin-get-all-seller`,{withCredentials:true})
+      dispatch({
+        type: "getAllSellersSuccess",
+        payload: data.adminAllSeller
+      })
+    } catch (error) {
+      dispatch({
+        type: "getAllSellerFailed",
+        payload: error.response.data.message,
+      });
+      
+    }
+  }

@@ -4,7 +4,8 @@ const initialState = {
   isLoading: true,
   isSeller: false,
   seller: null,
-  error: null
+  error: null,
+  sellers:null
 
 };
 
@@ -37,5 +38,5 @@ export const sellerReducer = createReducer(initialState, {
   },
   clearErrors: (state) => {
     state.error = null;
-  },
+  }
 });

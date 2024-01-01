@@ -6,7 +6,7 @@ const initialState = {
     product: null,
     allProducts:null,
     error:null,
-    success:false
+    success:false,
 }
 
 export const productReducer = createReducer(initialState, {

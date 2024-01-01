@@ -69,4 +69,17 @@ router.get("/get-all-products",catchAsyncErrors(async(req,res,next)=>{
         
     }
 }))
+
+//admin get all product
+router.get("/admin-get-all-product",catchAsyncErrors(async(req,res,next)=>{
+    try {
+        const adminAllProduct = await Product.find()
+
+        res.status(200).json({success:true,adminAllProduct})
+        
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400));
+
+    }
+}))
 module.exports = router 
