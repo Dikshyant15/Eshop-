@@ -271,11 +271,11 @@ router.get("/admin-get-all-user", catchAsyncErrors(async (req, res, next) => {
 }))
 
 //admin delete user
-router.delete("/delete-user-admin", catchAsyncErrors(async (req, res, next) => {
+router.delete("/delete-user-admin/:id", catchAsyncErrors(async (req, res, next) => {
     try {
-        const userId = req.body.id
+        const userId = req.params.id
         console.log(userId)
-        const deleteUserID = await User.findByIdAndDelete(userId)
+        await User.findByIdAndDelete(userId)
 
         res.status(200).json({ message: "User deleted successfully", success: true })
 

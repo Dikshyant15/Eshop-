@@ -241,6 +241,24 @@ router.get("/admin-get-all-seller",catchAsyncErrors(async(req,res,next)=>{
   }
 }))
 
+//admin delete seler
+router.delete("/delete-seller-admin/:id", catchAsyncErrors(async (req, res, next) => {
+  try {
+      const sellerId = req.params.id
+      console.log(sellerId)
+      await Shop.findByIdAndDelete(sellerId)
+
+      res.status(200).json({ message: "Seller deleted successfully", success: true })
+
+  } catch (error) {
+      return next(new ErrorHandler(error.message, 400));
+
+
+  }
+
+})
+)
+
 module.exports = router
 
 

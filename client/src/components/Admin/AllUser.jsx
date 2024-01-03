@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { adminGetAllUsers } from '../../redux/actions/user';
 import { toast } from 'react-toastify';
 import { server } from '../../server';
+import { RxCross1 } from 'react-icons/rx';
 
 const AllUser = () => {
   const dispatch = useDispatch()
@@ -18,11 +19,13 @@ const AllUser = () => {
 
   //taking the id from the table cell 
   const deleteUser = (id) => {
-    axios.delete(`${server}/user/delete-user-admin`, { id }, { withCredentials: true }).then((res) => {
+    axios.delete(`${server}/user/delete-user-admin/${id}`, { withCredentials: true }).then((res) => {
       toast.success(res.data.message)
     }
 
     )
+     dispatch(adminGetAllUsers());
+    
 
 
   }
@@ -97,10 +100,12 @@ const AllUser = () => {
   ];
 
   return (
-    <div className="w-full flex justify-center pt-5">
-      <div className="w-[97%]">
+    <div className="w-full flex justify-center pt-5 ">
+      <div className="w-[97%] ">
         <h3 className="text-[22px] font-Poppins pb-2">All Users</h3>
-        <div className="w-full min-h-[45vh] bg-white rounded">      <DataGrid
+
+
+        <DataGrid
           rows={row}
           columns={column}
           pageSize={4}
@@ -108,11 +113,19 @@ const AllUser = () => {
           autoHeight
         />
 
-          {open && (<div className="z-10 flex bg-white">asdas
+        {open && (
+          <div className="w-full fixed top-0 left-0 z-[999] bg-[#00000039] flex items-center justify-center h-screen">
+            <div className="w-[95%] 800px:w-[40%] min-h-[20vh] bg-white rounded shadow p-5">
+              <div className="w-full flex justify-end cursor-pointer">
+                <RxCross1 onClick={()=> setOpen(false)}/>
+                </div>
+                <p className='text-2xl justify-center '>Are you sure you want to delete the user?</p><hr/>
+                <div className =' flex justify-center gap-10 p-5'><Button variant= 'contained' onClick={()=>deleteUser(userId)}>Yes</Button> 
+                <Button variant= 'contained' onClick={()=> setOpen(false)}>No</Button></div> 
+            </div>
           </div>)}
-
-        </div>
       </div>
+
     </div>
 
 
