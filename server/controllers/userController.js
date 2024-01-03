@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken")
 const { upload } = require("../multer")
 // const {uploadSingle} = multer({ dest: 'uploads/' });
 const ErrorHandler = require("../utils/ErrorHandler")
-const {isAuthenticated} = require("../Middlewares/auth")
+const { isAuthenticated } = require("../Middlewares/auth")
 const catchAsyncErrors = require("../Middlewares/catchAsyncErrors");
 const User = require("../models/Users")
 const sendMail = require("../utils/sendMail")
@@ -187,88 +187,106 @@ router.put(
     "/update-user-info",
     isAuthenticated,
     catchAsyncErrors(async (req, res, next) => {
-      try {
-        const { email, password, phoneNumber, name } = req.body;
-  
-        const user = await User.findOne({ email }).select("+password");
-  
-        if (!user) {
-          return next(new ErrorHandler("User not found", 400));
+        try {
+            const { email, password, phoneNumber, name } = req.body;
+
+            const user = await User.findOne({ email }).select("+password");
+
+            if (!user) {
+                return next(new ErrorHandler("User not found", 400));
+            }
+
+            const isPasswordValid = await user.comparePassword(password);
+
+            if (!isPasswordValid) {
+                return next(
+                    new ErrorHandler("Please provide the correct information", 400)
+                );
+            }
+
+            user.name = name;
+            user.email = email;
+            user.phoneNumber = phoneNumber;
+
+            await user.save();
+
+            res.status(201).json({
+                success: true,
+                user,
+            });
+        } catch (error) {
+            return next(new ErrorHandler(error.message, 500));
         }
-  
-        const isPasswordValid = await user.comparePassword(password);
-  
-        if (!isPasswordValid) {
-          return next(
-            new ErrorHandler("Please provide the correct information", 400)
-          );
-        }
-  
-        user.name = name;
-        user.email = email;
-        user.phoneNumber = phoneNumber;
-  
-        await user.save();
-  
-        res.status(201).json({
-          success: true,
-          user,
-        });
-      } catch (error) {
-        return next(new ErrorHandler(error.message, 500));
-      }
     })
-  );
+);
 
 
-  //change password 
-  router.put("/update-user-password",isAuthenticated,catchAsyncErrors(async (req, res, next) => {
+//change password 
+router.put("/update-user-password", isAuthenticated, catchAsyncErrors(async (req, res, next) => {
     try {
         const user = await User.findById(req.user.id).select("+password")
 
-    const isPasswordMatched = await user.comparePassword(req.body.oldPassword)
+        const isPasswordMatched = await user.comparePassword(req.body.oldPassword)
 
-    if(!isPasswordMatched){
-        return next(new ErrorHandler("Password doesn't match ", 400));
+        if (!isPasswordMatched) {
+            return next(new ErrorHandler("Password doesn't match ", 400));
 
-    }
+        }
 
-    if (req.body.newPassword !== req.body.confirmPassword) {
-        return next(
-          new ErrorHandler("New password doesn't matched with confirm password!", 400)
-        );
-      }
-      
-      user.password = req.body.newPassword
-      await user.save()
+        if (req.body.newPassword !== req.body.confirmPassword) {
+            return next(
+                new ErrorHandler("New password doesn't matched with confirm password!", 400)
+            );
+        }
 
-      res.status(200).json({
-        success: true,
-        message: "Password updated successfully!",
-      });
-    
-        
+        user.password = req.body.newPassword
+        await user.save()
+
+        res.status(200).json({
+            success: true,
+            message: "Password updated successfully!",
+        });
+
+
     } catch (error) {
         return next(new ErrorHandler(error.message, 500));
 
-        
+
     }
-    
-    }))
+
+}))
 
 
 //admin get all users
-router.get("/admin-get-all-user",catchAsyncErrors(async(req,res,next)=>{
+router.get("/admin-get-all-user", catchAsyncErrors(async (req, res, next) => {
     try {
         const adminAllUser = await User.find()
 
-        res.status(200).json({success:true,adminAllUser})
-        
+        res.status(200).json({ success: true, adminAllUser })
+
     } catch (error) {
         return next(new ErrorHandler(error.message, 400));
 
     }
 }))
+
+//admin delete user
+router.delete("/delete-user-admin", catchAsyncErrors(async (req, res, next) => {
+    try {
+        const userId = req.body.id
+        console.log(userId)
+        const deleteUserID = await User.findByIdAndDelete(userId)
+
+        res.status(200).json({ message: "User deleted successfully", success: true })
+
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400));
+
+
+    }
+
+})
+)
 
 
 
