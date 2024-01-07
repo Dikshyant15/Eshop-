@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../../styles/styles'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllProductsShop } from '../../redux/actions/product';
 import axios from 'axios'
@@ -13,6 +13,7 @@ const ShopInfo = ({ isOwner }) => {
     const { product } = useSelector((state) => state.product)
     const dispatch = useDispatch()
     const { id } = useParams()
+    const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(getAllProductsShop(id))
@@ -25,14 +26,25 @@ const ShopInfo = ({ isOwner }) => {
 
     }, [])
 
+    // const logoutHandler = async () => {
+    //     axios.get(`${server}/shop/logout`, { withCredentials: true }).then((res) => {
+    //         toast.success(res.data.message)
+    //         // window.location.reload();
+    //         navigate("/shop-login") 
+            
+    //     })
+
+    // }
+
     const logoutHandler = async () => {
-        axios.post(`${server}/shop/logout`, { withCredentials: true }).then((res) => {
-            toast.success("Logout Successful")
-
-        })
+        axios.get(`${server}/shop/shop-logout`,{
+          withCredentials: true,
+        });
         window.location.reload();
+        // navigate("/shop-login") 
 
-    }
+
+      };
 
     console.log(data)
     return (
@@ -46,19 +58,19 @@ const ShopInfo = ({ isOwner }) => {
             </div>
 
             <div>
-                <h3 className="text-center py-2 text-[20px] ">{data.name}</h3>
+                <h3 className="text-center py-2 text-[20px] ">{data?.name}</h3>
                 <p className="text-[16px] text-[#000000a6] p-[10px] flex items-center">
-                    {data.description}
+                    {data?.description}
                 </p>
             </div>
 
             <div className="p-3">
                 <h5 className="font-[600]">Address</h5>
-                <h4 className="text-[#000000a6]">{data.address}</h4>
+                <h4 className="text-[#000000a6]">{data?.address}</h4>
             </div>
             <div className="p-3">
                 <h5 className="font-[600]">Phone Number</h5>
-                <h4 className="text-[#000000a6]">{data.phoneNumber}</h4>
+                <h4 className="text-[#000000a6]">{data?.phoneNumber}</h4>
             </div>
             <div className="p-3">
                 <h5 className="font-[600]">Total Products</h5>
@@ -70,7 +82,7 @@ const ShopInfo = ({ isOwner }) => {
             </div>
             <div className="p-3">
                 <h5 className="font-[600]">Joined On</h5>
-                <h4 className="text-[#000000b0]">{data.createdAt}</h4>
+                <h4 className="text-[#000000b0]">{data?.createdAt}</h4>
             </div>
 
 

@@ -3,31 +3,39 @@ import { RxPerson } from "react-icons/rx";
 import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
 import { AiOutlineLogin, AiOutlineMessage } from "react-icons/ai";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { RiAdminLine } from "react-icons/ri";
 import {
     MdOutlineAdminPanelSettings,
     MdOutlinePassword,
     MdOutlineTrackChanges,
-  } from "react-icons/md";
-  import { TbAddressBook } from "react-icons/tb";
-  import { Link, useNavigate } from "react-router-dom";
-  import axios from "axios"
-  import {server} from "../../server"
-  import { toast } from "react-toastify";
+} from "react-icons/md";
+import { TbAddressBook } from "react-icons/tb";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios"
+import { server } from "../../server"
+import { toast } from "react-toastify";
+import { useSelector } from 'react-redux';
 
-const ProfileSidebar = ({ active ,setActive}) => {
+const ProfileSidebar = ({ active, setActive }) => {
     const navigate = useNavigate()
+    const { user } = useSelector((state) => state.user)
 
-    const logoutHandler =() =>{
-        axios.post(`${server}/user/logout`,{withCredentials:true}).then((res)=>{
+    const adminDashboardHandler = () =>{
+        navigate("/admin/dashboard")
+
+    }
+
+    const logoutHandler = () => {
+        axios.post(`${server}/user/logout`, { withCredentials: true }).then((res) => {
             toast.success(res.data.message)
-             window.location.reload(true);
+            window.location.reload(true);
             navigate("/login")
 
-        }).catch((error)=>{
+        }).catch((error) => {
             console.log(error.response.data.message)
         })
 
-        
+
     }
     return (
         <div className='w-full shadow-sm rounded-[40px] p-4 pt-8 border-black'>
@@ -113,18 +121,38 @@ const ProfileSidebar = ({ active ,setActive}) => {
                 </span>
             </div>
 
+            {/*admin user */}
+            {user && user.role === "Admin" && (
+
+
+                <div
+                    className="flex items-center cursor-pointer w-full mb-8"
+                    onClick={adminDashboardHandler}
+                >
+                    <RiAdminLine  size={20} color={active === 8 ? "red" : ""} />
+                    <span
+                        className={`pl-3 ${active === 8 ? "text-[red]":""
+                            } 800px:block hidden`}
+                    >
+                        Visit Admin Dashboard
+                    </span>
+                </div>
+            )}
+
             <div
-            className="flex items-center cursor-pointer w-full mb-8"
-            onClick={logoutHandler}
-        >
-            <AiOutlineLogin size={20} color={ "red"} />
-            <span
-                className={`pl-3 ${ "text-[red]" 
-                    } 800px:block hidden`}
+                className="flex items-center cursor-pointer w-full mb-8"
+                onClick={logoutHandler}
             >
-                Logout
-            </span>
-        </div>
+                <AiOutlineLogin size={20} color={"red"} />
+                <span
+                    className={`pl-3 ${"text-[red]"
+                        } 800px:block hidden`}
+                >
+                    Logout
+                </span>
+            </div>
+
+
 
 
         </div>

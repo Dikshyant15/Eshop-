@@ -19,7 +19,6 @@ import {
   updateUserInformation,
 } from "../../redux/actions/user";
 import { Country, State } from "country-state-city";
-import { useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 // import { getAllOrdersOfUser } from "../../redux/actions/order";
@@ -37,6 +36,7 @@ const ProfileContent = ({ active }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateUserInformation(name, email, phoneNumber, password));
+    toast.success("User information updated successfully")
 
   }
   return (
@@ -156,7 +156,7 @@ const ProfileContent = ({ active }) => {
       {/*  user Address */}
       {active === 7 && (
         <div>
-           {/*<Address />*/}
+           <UserAddress />
         </div>
       )}
     </div>
@@ -421,18 +421,33 @@ const ChangePassword = () => {
   );
 };
 
-{/*const Address = () => {
- 
+const UserAddress = () => {
+  const [open,setOpen] = useState(false)
+  const [city,setCity] = useState("")
+  const [addressType,setAddressType] = useState("")
+  const [addressTypeData,setAddressTypeData] = useState("")
+  const [address1,setAddress1] = useState("")
+  const [address2,setAddress2] = useState("")
+  const [zipCode,setZipCode] = useState("")
 
+  const {user} = useSelector((state)=> state.user)
+
+  const handleSubmit = () => {
+    console.log("hi")
+  }
+  const handleDelete = () => {
+    console.log("hi")
+  }
   return (
-    <div className="w-full px-5">
+    <div className="w-full px-5 mt-20">
       {open && (
-        <div className="fixed w-full h-screen bg-[#0000004b] top-0 left-0 flex items-center justify-center ">
-          <div className="w-[35%] h-[80vh] bg-white rounded shadow relative overflow-y-scroll">
-            <div className="w-full flex justify-end p-3">
+        <div className="fixed w-full h-screen bg-[#0000004b] top-0 left-0 flex items-center justify-center pt-20  ">
+          <div className="w-[55%] h-[80vh] bg-white rounded shadow  overflow-y-scroll relative ">
+            <div className="w-full flex justify-end p-3 ">
               <RxCross1
                 size={30}
                 className="cursor-pointer"
+                onClick={()=>setOpen(!open)}
               />
             </div>
             <h1 className="text-center text-[25px] font-Poppins">
@@ -440,8 +455,8 @@ const ChangePassword = () => {
             </h1>
             <div className="w-full">
               <form aria-required onSubmit={handleSubmit} className="w-full">
-                <div className="w-full block p-4">
-                  <div className="w-full pb-2">
+                <div className="w-full p-4 grid grid-cols-2 grid-rows-2 gap-5">
+                  <div className="w-full pb-2 ">
                     <label className="block pb-2">Country</label>
                     <select
                       name=""
@@ -451,7 +466,7 @@ const ChangePassword = () => {
                       <option value="" className="block border pb-2">
                         choose your country
                       </option>
-                      {/*Country &&
+                      {Country &&
                         Country.getAllCountries().map((item) => (
                           <option
                             className="block pb-2"
@@ -460,7 +475,7 @@ const ChangePassword = () => {
                           >
                             {item.name}
                           </option>
-                        ))
+                        ))}
                     </select>
                   </div>
 
@@ -477,7 +492,7 @@ const ChangePassword = () => {
                         choose your city
                       </option>
                       {State &&
-                        State.getStatesOfCountry(country).map((item) => (
+                        State.getAllStates().map((item) => (
                           <option
                             className="block pb-2"
                             key={item.isoCode}
@@ -608,7 +623,7 @@ const ChangePassword = () => {
       )}
     </div>
   );
-};*/}
+};
 
 
 export default ProfileContent

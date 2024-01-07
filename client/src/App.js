@@ -21,7 +21,7 @@ import {
 import {AdminDashboardPage} from "./route/AdminRoute.js";
 import Store from "./redux/store.js";
 import { loadUser } from "./redux/actions/user";
-import { loadSeller } from "./redux/actions/seller";
+import { getAllSellersAdmin, loadSeller } from "./redux/actions/seller";
 import { getAllProducts } from "./redux/actions/product";
 import { useSelector } from 'react-redux'
 import { ToastContainer, toast } from "react-toastify";
@@ -35,6 +35,7 @@ import SellerProtectedRoute from './route/SellerProtectedRoute.js'
 import ProtectedAdminRoute from './route/ProtectedAdminRoute.js'
 import CreateProductPage from './pages/Shop/CreateProductPage.jsx';
 import { getAllEvents } from './redux/actions/event.js';
+import AllSeller from './components/Admin/AllSeller.jsx';
 
 const App = () => {
   // const {isSeller} = useSelector((state)=>state.seller)
@@ -45,6 +46,7 @@ const App = () => {
       Store.dispatch(loadSeller())
       Store.dispatch(getAllProducts())
       Store.dispatch(getAllEvents())
+      Store.dispatch(getAllSellersAdmin())
 
       //  if(isSeller === true){return <Navigate to="/shop-home-page"/>}
       //   axios.get("`{server}/user/getUser",{withCredentials:true}).then((res)=>{
@@ -128,8 +130,8 @@ const App = () => {
         />
         <Route
           path="/shop-home-page/:id"
-          // element={<SellerProtectedRoute><ShopHomePage /></SellerProtectedRoute>}
-          element={<ShopHomePage />}
+          element={<SellerProtectedRoute><ShopHomePage /></SellerProtectedRoute>}
+          // element={<ShopHomePage />}
         />
         <Route
           path="/shop-dashboard"
@@ -163,11 +165,19 @@ const App = () => {
 
          {/* Admin Routes */}
          <Route
+         path="/admin-sellers"
+         element={
+           <ProtectedAdminRoute>
+             <AllSeller />
+           </ProtectedAdminRoute>
+         }
+       />
+         <Route
          path="/admin/dashboard"
          element={
-           //<ProtectedAdminRoute>
+           <ProtectedAdminRoute>
              <AdminDashboardPage />
-           //</ProtectedAdminRoute>
+           </ProtectedAdminRoute>
          }
        />
 

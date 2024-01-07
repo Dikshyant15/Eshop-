@@ -11,11 +11,12 @@ const ShopLoginPage = () => {
     const [password, setPassword] = useState("")
     const navigate = useNavigate()
 
-    const { isSeller, isLoading } = useSelector((state) => state.seller);
+    const { isSeller, isLoading,seller } = useSelector((state) => state.seller);
 
     useEffect(() => {
         if (isSeller === true) {
-            navigate(`/shop-dashboard`);
+            // navigate(`/shop-dashboard`);
+            navigate(`/shop-home-page/${seller._id}`);
             // window.location.reload(true); 
 
         }

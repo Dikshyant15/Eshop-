@@ -8,25 +8,28 @@ import { server } from '../../server';
 
 
 const AllProduct = () => {
-  const [data,setData] = useState([])
+  const [data, setData] = useState([])
   const row = []
 
-  
-  useEffect(()=>{
-    axios.get(`${server}/product/admin-get-all-product`,{withCredentials:true}).then((res)=>{
+
+  useEffect(() => {
+    axios.get(`${server}/product/admin-get-all-product`, { withCredentials: true }).then((res) => {
       setData(res.data.adminAllProduct)
     })
-  },[])
+  }, [])
 
-  {data.forEach((item)=>{
-    row.push({
-      id:item._id,
-      name:item.productName,
-      price:item.discountPrice,
-      stock:item.stock,
-      sold:item.sold_out
-    })})}
-  
+  {
+    data.forEach((item) => {
+      row.push({
+        id: item._id,
+        name: item.productName,
+        price: item.discountPrice,
+        stock: item.stock,
+        sold: item.sold_out
+      })
+    })
+  }
+
 
   const column = [
     { field: "id", headerName: "Product Id", minWidth: 100, flex: 0.1 },
@@ -60,7 +63,7 @@ const AllProduct = () => {
     {
       field: "Preview",
       headerName: "Preview Product",
-      minWidth:100 ,
+      minWidth: 100,
       type: "number",
       sortable: false,
       renderCell: (params) => {
@@ -78,14 +81,16 @@ const AllProduct = () => {
   ];
   return (
     <div>
-    <DataGrid
-      rows={row}
-      columns={column}
-      pageSize={4}
-      disableSelectionOnClick
-      autoHeight
-    />
-  </div>  )
+      <h3 className="text-[22px] font-Poppins pb-2">All Products</h3>
+
+      <DataGrid
+        rows={row}
+        columns={column}
+        pageSize={4}
+        disableSelectionOnClick
+        autoHeight
+      />
+    </div>)
 }
 
 export default AllProduct

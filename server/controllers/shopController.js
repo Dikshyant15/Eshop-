@@ -212,9 +212,9 @@ router.get('/get-shop-info/:id', catchAsyncErrors(async (req, res, next) => {
 )
 
 //logout 
-router.post('/logout',catchAsyncErrors(async(req,res,next)=>{
+router.get('/shop-logout',catchAsyncErrors(async(req,res,next)=>{
   try {
-    res.cookie("token", null, {
+    res.cookie("seller_token", null, {
       expires: new Date(Date.now()),
       httpOnly: true,
       sameSite: "none",

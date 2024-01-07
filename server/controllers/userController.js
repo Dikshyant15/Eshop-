@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken")
 const { upload } = require("../multer")
 // const {uploadSingle} = multer({ dest: 'uploads/' });
 const ErrorHandler = require("../utils/ErrorHandler")
-const { isAuthenticated } = require("../Middlewares/auth")
+const { isAuthenticated,isAdmin } = require("../Middlewares/auth")
 const catchAsyncErrors = require("../Middlewares/catchAsyncErrors");
 const User = require("../models/Users")
 const sendMail = require("../utils/sendMail")
@@ -258,7 +258,7 @@ router.put("/update-user-password", isAuthenticated, catchAsyncErrors(async (req
 
 
 //admin get all users
-router.get("/admin-get-all-user", catchAsyncErrors(async (req, res, next) => {
+router.get("/admin-get-all-user",isAuthenticated,isAdmin("Admin"), catchAsyncErrors(async (req, res, next) => {
     try {
         const adminAllUser = await User.find()
 
@@ -271,7 +271,7 @@ router.get("/admin-get-all-user", catchAsyncErrors(async (req, res, next) => {
 }))
 
 //admin delete user
-router.delete("/delete-user-admin/:id", catchAsyncErrors(async (req, res, next) => {
+router.delete("/delete-user-admin/:id",isAuthenticated,isAdmin("Admin"), catchAsyncErrors(async (req, res, next) => {
     try {
         const userId = req.params.id
         console.log(userId)

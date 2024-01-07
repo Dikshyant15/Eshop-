@@ -6,18 +6,24 @@ import { MdBorderClear } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import Button from '@mui/material/Button';
 import { DataGrid } from '@mui/x-data-grid';
+import { BsDoorOpenFill } from "react-icons/bs";
 
 
 const DashboardHero = () => {
+    const { seller } = useSelector((state) => state.seller)
+    const { allProducts } = useSelector((state) => state.product)
 
     const columns = [
         { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
     ]
     const rows = []
-    
+
     return (
         <div className="w-full p-8">
-            <h3 className="text-[22px] font-Poppins pb-2">Overview</h3>
+            <div className='flex flex-row gap-[55.75rem]'>
+                <h3 className="text-[22px] font-Poppins pb-2">Overview</h3>
+                <h3 className="text-[24px] font-Poppins text-red-400"> Welcome {seller.name} </h3>
+            </div>
             <div className="w-full block 800px:flex items-center justify-between">
                 <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
                     <div className="flex items-center">
@@ -67,7 +73,7 @@ const DashboardHero = () => {
                             All Products
                         </h3>
                     </div>
-                    <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">products</h5>
+                    <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{allProducts&& allProducts.length}</h5>
                     <Link to="/dashboard-products">
                         <h5 className="pt-4 pl-2 text-[#077f9c]">View Products</h5>
                     </Link>
@@ -84,7 +90,7 @@ const DashboardHero = () => {
                     autoHeight
                 />
             </div>
-        </div>)
+        </div >)
 }
 
 export default DashboardHero

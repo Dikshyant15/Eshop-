@@ -11,10 +11,14 @@ import AllUser from './AllUser';
 import AllProduct from './AllProduct';
 import AllSeller from './AllSeller';
 import AllEvent from './AllEvent';
+import { useSelector } from 'react-redux';
 
 const AdminDashboardMain = ({ active }) => {
   const row = []
   const columns = []
+  
+
+  const { sellers } = useSelector((state)=> state.seller)
   return (
     <div className="w-full p-4">
       {active && active === 1 ?
@@ -50,7 +54,7 @@ const AdminDashboardMain = ({ active }) => {
                     All Sellers
                   </h3>
                 </div>
-                <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">no of sellers</h5>
+                <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{sellers && sellers.length}</h5>
                 <Link to="/admin-sellers">
                   <h5 className="pt-4 pl-2 text-[#077f9c]">View Sellers</h5>
                 </Link>

@@ -7,6 +7,8 @@ const AllOrder = () => {
   const column = []
   return (
     <div>
+      <h3 className="text-[22px] font-Poppins pb-2">All Orders</h3>
+
       <DataGrid
         rows={row}
         columns={column}
