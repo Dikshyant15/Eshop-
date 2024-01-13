@@ -37,8 +37,8 @@ const Header = ({ activeHeading }) => {
 
     }
 
-    console.log(searchInput)
-    console.log(searchData)
+    // console.log(searchInput)
+    // console.log(searchData)
 
     return (
         <div className={`${styles.section}`}>

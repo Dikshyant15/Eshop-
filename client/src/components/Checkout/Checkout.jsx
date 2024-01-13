@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Country, State, City } from 'country-state-city';
 
 const Checkout = () => {
+  const { user } = useSelector((state) => state.user)
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
   const [userInfo, setUserInfo] = useState(false);
@@ -14,7 +15,6 @@ const Checkout = () => {
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
 
-  const { user } = useSelector((state) => state.user)
 
   return (
     <div className='w-full flex flex-col items-center py-8'>
@@ -77,6 +77,24 @@ const CartData = () => {
 }
 
 const ShippingInfo = ({ user,  userInfo, setUserInfo, country, setCountry, city, setCity, zipCode, setZipCode, couponCode, couponCodeData, discountPrice, address1, setAddress1, address2, setAddress2 }) => {
+  const [isChecked, setIsChecked] = useState(false);
+  console.log(country)
+
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+    setCountry("")
+    setCity("")
+    setAddress1("")
+    setZipCode("")
+    if(!isChecked){
+      setCountry(user.addresses[0].country)
+      setCity(user.addresses[0].city)
+      setAddress1(user.addresses[0].address1)
+      setAddress2(user.addresses[0].address2)
+      setZipCode(user.addresses[0].zipCode)
+    }
+  };
   return (
     <div className='w-full 800px:w-[95%] bg-white rounded-md p-5 pb-8'>
       <h5 className="text-[18px] font-[500]">Shipping Address</h5>
@@ -155,7 +173,7 @@ const ShippingInfo = ({ user,  userInfo, setUserInfo, country, setCountry, city,
                 Choose your City
               </option>
               {State &&
-                State.getAllStates().map((item) => (
+                State.getStatesOfCountry(country).map((item) => (
                   <option key={item.isoCode} value={item.isoCode}>
                     {item.name}
                   </option>
@@ -190,7 +208,7 @@ const ShippingInfo = ({ user,  userInfo, setUserInfo, country, setCountry, city,
         <div></div>
       </form>
       <h5
-        className="text-[18px] cursor-pointer inline-block"
+        className={`text-[18px] cursor-pointer inline-block text-cyan-700`}
         onClick = {() => setUserInfo(!userInfo)}
       >
         Choose From saved address
@@ -204,6 +222,8 @@ const ShippingInfo = ({ user,  userInfo, setUserInfo, country, setCountry, city,
                 <input
                   type="checkbox"
                   className="mr-3"
+                  isChecked={isChecked}
+                  onChange={handleCheckboxChange}
                   value={item.addressType}
                   onClick={() =>
                     setAddress1(item.address1) ||

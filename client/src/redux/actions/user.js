@@ -46,19 +46,19 @@ export const updateUserInformation = (name, email, phoneNumber, password) => asy
 }
 
 //admin get all users
-export const adminGetAllUsers = () => async (dispatch)=>{
+export const adminGetAllUsers = () => async (dispatch) => {
   try {
-    dispatch ({
+    dispatch({
       type: "getAllUsersRequest"
     })
 
-    const {data} = await axios.get(`${server}/user/admin-get-all-user`, { withCredentials: true })
-    dispatch ({
-      type : "getAllUsersSuccess",
+    const { data } = await axios.get(`${server}/user/admin-get-all-user`, { withCredentials: true })
+    dispatch({
+      type: "getAllUsersSuccess",
       payload: data.adminAllUser
     })
 
-    
+
   } catch (error) {
     dispatch({
       type: "getAllUsersFailed",
@@ -68,4 +68,53 @@ export const adminGetAllUsers = () => async (dispatch)=>{
 
 }
 
+//update user info 
+export const updateUserAddress = (city, country, addressType, address1, address2, zipCode) => async (dispatch) => {
+  try {
+    dispatch({
+      type: " updateUserAddressRequest",
+    })
+    const { data } = await axios.put(`${server}/user/update-user-address`, { city, country, addressType, address1, address2, zipCode }, {
+      withCredentials: true, headers: {
+        "Access-Control-Allow-Credentials": true,
+      },
+    })
+    dispatch({
+      type: " updateUserAddressRequestSuccess",
+      payload: data.user
+    })
 
+
+
+  } catch (error) {
+    dispatch({
+      type: "updateUserAddressFailed",
+      payload: error.response.data.message,
+    });
+
+  }
+}
+
+//delete user address 
+export const deleteUserAddress = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: " deleteUserRequest",
+    })
+    const { data } = await axios.delete(`${server}/user/delete-user-address/${id}`, {
+      withCredentials: true, headers: {
+        "Access-Control-Allow-Credentials": true,
+      },
+    })
+    dispatch({
+      type: " deleteUserRequestSuccess",
+      payload: data.user
+    })
+
+  } catch (error) {
+    dispatch({
+      type: "deleteUserRequestFail",
+      payload: error.response.data.message,
+    });
+  }
+}

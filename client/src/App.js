@@ -29,7 +29,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css"
 import axios from 'axios'
 import ProtectedRoute from './route/ProtectedRoute.js'
-import { AllProductPage, CreateEventsPage, ShopDashboardPage, AllEventPage, AllOrderPage } from './route/ShopRoute.js'
+import { AllProductPage, CreateEventsPage, ShopDashboardPage, AllEventPage, AllOrderPage,AllCouponPage } from './route/ShopRoute.js'
 import { ShopHomePage } from './ShopRoute.js'
 import SellerProtectedRoute from './route/SellerProtectedRoute.js'
 import ProtectedAdminRoute from './route/ProtectedAdminRoute.js'
@@ -157,6 +157,10 @@ const App = () => {
         <Route
           path="/dashboard-orders"
           element={<SellerProtectedRoute><AllOrderPage /></SellerProtectedRoute>}
+        />
+        <Route
+          path="/dashboard-coupons"
+          element={<SellerProtectedRoute><AllCouponPage /></SellerProtectedRoute>}
         />
         <Route
           path="/shop/preview/:id"

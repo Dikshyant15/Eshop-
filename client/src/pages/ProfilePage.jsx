@@ -3,9 +3,12 @@ import Header from '../components/Layout/Header'
 import ProfileSidebar from '../components/Profile/ProfileSidebar'
 import styles from '../styles/styles'
 import ProfileContent from '../components/Profile/ProfileContent'
+import { useSelector } from 'react-redux'
 
 const ProfilePage = () => {
     const [active, setActive] = useState(1);
+    const { loading,isAuthenticated } = useSelector((state) => state.user);
+    console.log(isAuthenticated)
     return (
         <div>
             <Header />

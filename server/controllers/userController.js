@@ -256,6 +256,64 @@ router.put("/update-user-password", isAuthenticated, catchAsyncErrors(async (req
 
 }))
 
+//update user address information 
+router.put(`/update-user-address`,isAuthenticated,catchAsyncErrors(async(req,res,next)=>{
+    try {
+        const userId = req.user.id
+        const user = await User.findById(userId)
+
+        const userAddressTypeExists = user.addresses.find((address)=>{
+            address.addressType === req.body.addressType
+        }) 
+        if(userAddressTypeExists){
+            return next(
+                new ErrorHandler(`${req.body.addressType} address already exists`)
+              );
+        }
+        const userAddressExists = user.addresses.find((address)=>{
+            address._id === req.body._id
+        }) 
+
+        if(userAddressExists){
+            Object.assign(userAddressExists,req.body)
+        }else{
+            user.addresses.push(req.body);
+        }
+        await user.save()
+        res.status(200).json({
+            success: true,
+            user,
+          });        
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 500));  
+    }
+}))
+
+//delete user address
+router.delete("/delete-user-address/:id",isAuthenticated, catchAsyncErrors(async(req,res,next)=>{
+    try {
+        const userId = req.user._id
+        console.log(`lund ${userId}`)
+        const addressId = req.params.id
+        console.log(`tatti ${addressId}`)
+        await User.updateOne(
+            {
+              _id: userId,
+            },
+            { $pull: { addresses: { _id: addressId } } }
+          );
+    
+          const user = await User.findById(userId);
+    
+          res.status(200).json({ success: true, user })
+          console.log(user)
+        
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 500));  
+
+    }
+}))
+
 
 //admin get all users
 router.get("/admin-get-all-user",isAuthenticated,isAdmin("Admin"), catchAsyncErrors(async (req, res, next) => {
@@ -287,6 +345,63 @@ router.delete("/delete-user-admin/:id",isAuthenticated,isAdmin("Admin"), catchAs
 
 })
 )
+
+//update user--admin address information 
+router.put(`/update-user-address`,isAuthenticated,isAdmin("Admin"),catchAsyncErrors(async(req,res,next)=>{
+    try {
+        const userId = req.user.id
+        const user = await User.findById(userId)
+
+        const userAddressTypeExists = user.addresses.find((address)=>{
+            address.addressType === req.body.addressType
+        }) 
+        if(userAddressTypeExists){
+            return next(
+                new ErrorHandler(`${req.body.addressType} address already exists`)
+              );
+        }
+        const userAddressExists = user.addresses.find((address)=>{
+            address._id === req.body._id
+        }) 
+
+        if(userAddressExists){
+            Object.assign(userAddressExists,req.body)
+        }else{
+            user.addresses.push(req.body);
+        }
+        await user.save()
+        res.status(200).json({
+            success: true,
+            user,
+          });        
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 500));  
+    }
+}))
+
+//delete user-admin address
+router.delete("/delete-user-address/:id",isAuthenticated,isAdmin("Admin"), catchAsyncErrors(async(req,res,next)=>{
+    try {
+        const userId = req.user._id
+        const addressId = req.params.id
+        await User.updateOne(
+            {
+              _id: userId,
+            },
+            { $pull: { addresses: { _id: addressId } } }
+          );
+    
+          const user = await User.findById(userId);
+    
+          res.status(200).json({ success: true, user })
+          console.log(user)
+        
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 500));  
+
+    }
+}))
+
 
 
 
