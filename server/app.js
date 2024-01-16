@@ -33,11 +33,13 @@ const userRoute = require("./controllers/userController.js")
 const shopRoute = require("./controllers/shopController.js")
 const productRoute = require("./controllers/productController.js")
 const eventRoute = require("./controllers/eventController.js")
+const couponCodeRoute = require("./controllers/couponCodeController.js")
 
 app.use('/api/v2/user', userRoute)
 app.use('/api/v2/shop', shopRoute)
 app.use('/api/v2/product', productRoute)
 app.use('/api/v2/event', eventRoute)
+app.use('/api/v2/couponCode', couponCodeRoute)
 
 
 //middlewares
