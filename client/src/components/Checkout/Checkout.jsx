@@ -23,7 +23,7 @@ const Checkout = () => {
   const [address2, setAddress2] = useState("");
 
 
-  console.log(couponCode)
+  console.log(userInfo)
   const subTotalPrice = cart.reduce((acc, currentItem) => {
     return acc + currentItem.discountPrice * currentItem.qty
   }, 0)
@@ -166,6 +166,7 @@ const ShippingInfo = ({ user, userInfo, setUserInfo, country, setCountry, city, 
   console.log(country)
 
 
+ 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
     setCountry("")
