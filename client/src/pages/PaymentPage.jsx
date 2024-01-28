@@ -10,7 +10,7 @@ const PaymentPage = () => {
     <div className='w-full min-h-screen bg-[#f6f9fc]'>
       <Header />
       <br /><br />
-      <CheckoutSteps />
+      <CheckoutSteps active={2} />
       <Payment />
       <br /><br />
       <Footer />

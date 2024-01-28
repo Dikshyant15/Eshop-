@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { server } from "./server.js";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import {
   LoginPage,
@@ -16,30 +17,43 @@ import {
   ProductDetailPage,
   ShopPreviewPage,
   PaymentPage,
-  CheckoutPage
+  CheckoutPage,
+  OrderSuccessPage
 } from "./route/Routes.js"
-import {AdminDashboardPage} from "./route/AdminRoute.js";
+import { AdminDashboardPage } from "./route/AdminRoute.js";
 import Store from "./redux/store.js";
 import { loadUser } from "./redux/actions/user";
 import { getAllSellersAdmin, loadSeller } from "./redux/actions/seller";
 import { getAllProducts } from "./redux/actions/product";
-import { useSelector } from 'react-redux'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css"
 import axios from 'axios'
 import ProtectedRoute from './route/ProtectedRoute.js'
-import { AllProductPage, CreateEventsPage, ShopDashboardPage, AllEventPage, AllOrderPage,AllCouponPage } from './route/ShopRoute.js'
+import { AllProductPage, CreateEventsPage, ShopDashboardPage, AllEventPage, AllOrderPage, AllCouponPage } from './route/ShopRoute.js'
 import { ShopHomePage } from './ShopRoute.js'
 import SellerProtectedRoute from './route/SellerProtectedRoute.js'
 import ProtectedAdminRoute from './route/ProtectedAdminRoute.js'
 import CreateProductPage from './pages/Shop/CreateProductPage.jsx';
 import { getAllEvents } from './redux/actions/event.js';
 import AllSeller from './components/Admin/AllSeller.jsx';
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
 
 const App = () => {
-  // const {isSeller} = useSelector((state)=>state.seller)
+  const [stripeApikey, setStripeApiKey] = useState("")
 
+  // const stripePromise = axios.get(`${server}/payment/config`)
+  // .then((res) => loadStripe(res.data.publishableKey));
+
+  const getStripeApiKey = () => {
+    axios.get(`${server}/payment/stripeapikey`).then((res) => {
+      setStripeApiKey(res.data.stripeApikey)
+
+    })
+  }
+  console.log(stripeApikey)
   useEffect(
     () => {
       Store.dispatch(loadUser())
@@ -47,19 +61,27 @@ const App = () => {
       Store.dispatch(getAllProducts())
       Store.dispatch(getAllEvents())
       Store.dispatch(getAllSellersAdmin())
+      getStripeApiKey()
 
-      //  if(isSeller === true){return <Navigate to="/shop-home-page"/>}
-      //   axios.get("`{server}/user/getUser",{withCredentials:true}).then((res)=>{
-      //     toast.error(res.data.message)
-      //   }).catch((error)=>{
-      //     toast.error(error.response.data.message)
-      //   })
     }, []
   )
   return (
     <BrowserRouter>
       {/*User Routes */}
+      {stripeApikey && (
+        <Elements stripe={loadStripe(stripeApikey)}>
+          <Routes>
+            <Route
+              path="/payment"
+              element={
+               <ProtectedRoute> <PaymentPage /></ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Elements>
+      )}
       <Routes>
+
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route
@@ -94,26 +116,20 @@ const App = () => {
           element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}
         />
 
-        <Route
-          path="/payment"
-          element={
-              <PaymentPage />
-          }
-        />
+
         <Route
           path="/checkout"
           element={
-              <CheckoutPage />
+            <ProtectedRoute> <CheckoutPage /></ProtectedRoute>
           }
         />
-        {/*<Route
-          path="/payment"
+        <Route
+          path="/order/success"
           element={
-            <ProtectedRoute>
-              <PaymentPage />
-            </ProtectedRoute>
+             <OrderSuccessPage />
           }
-        />*/}
+        />
+
 
         {/*Shop Routes */}
         <Route
@@ -131,7 +147,7 @@ const App = () => {
         <Route
           path="/shop-home-page/:id"
           element={<SellerProtectedRoute><ShopHomePage /></SellerProtectedRoute>}
-          // element={<ShopHomePage />}
+        // element={<ShopHomePage />}
         />
         <Route
           path="/shop-dashboard"
@@ -167,23 +183,23 @@ const App = () => {
           element={<SellerProtectedRoute><ShopPreviewPage /></SellerProtectedRoute>}
         />
 
-         {/* Admin Routes */}
-         <Route
-         path="/admin-sellers"
-         element={
-           <ProtectedAdminRoute>
-             <AllSeller />
-           </ProtectedAdminRoute>
-         }
-       />
-         <Route
-         path="/admin/dashboard"
-         element={
-           <ProtectedAdminRoute>
-             <AdminDashboardPage />
-           </ProtectedAdminRoute>
-         }
-       />
+        {/* Admin Routes */}
+        <Route
+          path="/admin-sellers"
+          element={
+            <ProtectedAdminRoute>
+              <AllSeller />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardPage />
+            </ProtectedAdminRoute>
+          }
+        />
 
       </Routes>
       <ToastContainer

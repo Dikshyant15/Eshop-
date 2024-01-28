@@ -23,7 +23,7 @@ const Checkout = () => {
   const [address2, setAddress2] = useState("");
 
 
-  console.log(userInfo)
+  // console.log(userInfo)
   const subTotalPrice = cart.reduce((acc, currentItem) => {
     return acc + currentItem.discountPrice * currentItem.qty
   }, 0)
@@ -89,15 +89,13 @@ const Checkout = () => {
         totalPrice,
         user,
         cart,
-        discountPrice
+        discountPrice,
+        shipping
       }
 
       localStorage.setItem("orderDetails", JSON.stringify(shippingDetails))
       navigate("/payment")
     }
-
-
-
   }
 
 
@@ -163,7 +161,7 @@ const CartData = ({ couponCode, setCouponCode, subTotalPrice, totalPrice, shippi
 
 const ShippingInfo = ({ user, userInfo, setUserInfo, country, setCountry, city, setCity, zipCode, setZipCode, couponCode, couponCodeData, discountPrice, address1, setAddress1, address2, setAddress2 }) => {
   const [isChecked, setIsChecked] = useState(false);
-  console.log(country)
+  // console.log(country)
 
 
  

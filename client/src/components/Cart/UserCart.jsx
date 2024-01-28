@@ -18,14 +18,14 @@ const UserCart = ({ setOpenCart }) => {
     dispatch(removeFromCart(data))
   }
 
+    const totalPrice = cart.reduce(
+      (acc, item) => acc + item.qty * item.discountPrice,
+      0
+    );  
   const quantityChangeHandler = (data) => {
-    addToCart(data)
+    dispatch(addToCart(data))
   }
 
-  const totalPrice = cart.reduce(
-    (acc, item) => acc + item.qty * item.discountPrice,
-    0
-  );
 
 
 
@@ -69,7 +69,8 @@ const UserCart = ({ setOpenCart }) => {
               <div className="w-full border-t">
                 {cart && cart.map((i, id) =>
                 (
-                  <CartSingleCard totalPrice={totalPrice} key={id} data={i} removeFromCartHandler={removeFromCartHandler} quantityChangeHandler={quantityChangeHandler} />
+                  <CartSingleCard totalPrice={totalPrice} key={id} data={i} removeFromCartHandler={removeFromCartHandler} 
+                  quantityChangeHandler={quantityChangeHandler} />
                 ))}
               </div>
             </div>
@@ -95,8 +96,7 @@ const UserCart = ({ setOpenCart }) => {
 }
 
 const CartSingleCard = ({ data, removeFromCartHandler, quantityChangeHandler }) => {
-  // const [increment, setIncrement] = useState(data.total_sell)
-  // const [decrement, setDecrement] = useState(data.total_sell)
+  
   const [value, setValue] = useState(data.qty)
 
   const totalPrice = data.discountPrice * value
@@ -140,16 +140,16 @@ const CartSingleCard = ({ data, removeFromCartHandler, quantityChangeHandler }) 
             <HiOutlineMinus size={16} color="#7d879c" />
           </div>
         </div>
-        {/*<img
+        {<img
           src={`${data?.images[0]?.url}`}
           alt=""
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
            />
-        */}
+        }
         <div className="pl-[15px]">
           <b className='text-[17px]'>{data?.productName}</b>
           <h4 className="font-[400] text-[15px] text-[#00000082]">
-            {/* ${data?.discountPrice} * {value}*/}
+            { `${data?.discountPrice} * ${value}`}
           </h4>
           <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-Roboto">
             US$ {totalPrice}
@@ -168,3 +168,7 @@ const CartSingleCard = ({ data, removeFromCartHandler, quantityChangeHandler }) 
 }
 
 export default UserCart
+
+
+
+

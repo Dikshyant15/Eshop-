@@ -8,7 +8,8 @@ import {
   CardExpiryElement,
   useStripe,
   useElements,
-  Elements
+  PaymentElement,
+  // Elements
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
@@ -18,47 +19,138 @@ import { server } from "../../server";
 import { toast } from "react-toastify";
 import { RxCross1 } from "react-icons/rx";
 
-const stripePromise = loadStripe("your_stripe_public_key");
-
 const Payment = () => {
   const { user } = useSelector((state) => state.user)
   const [open, setOpen] = useState(false)
-
-  const orderData = 5
-
-  const onApprove = () => { }
-  const createOrder = () => { }
-  const paymentHandler = () => { }
-  const cashOnDeliveryHandler = () => { }
+  const [orderData, setOrderData] = useState([])
+  const navigate = useNavigate()
+  const stripe = useStripe()
+  const element = useElements()
 
 
-  return (
-    <div className="w-full flex flex-col items-center py-8">
-      <div className="w-[90%] 1000px:w-[70%] block 800px:flex">
-        <div className="w-full 800px:w-[65%]">
-          <Elements stripe={stripePromise}>
+  useEffect(() => {
+    const orderData = JSON.parse(localStorage.getItem("orderDetails"))
+    setOrderData(orderData)
+    console.log(orderData)
+  }, [])
 
-            <PaymentInfo
-              user={user}
-              open={open}
-              setOpen={setOpen}
-              onApprove={onApprove}
-              createOrder={createOrder}
-              paymentHandler={paymentHandler}
-              cashOnDeliveryHandler={cashOnDeliveryHandler}
-            />
-          </Elements>
-        </div>
-        <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
-          <CartData orderData={orderData} />
-        </div>
-      </div>
-    </div>)
+  const order = {
+    cart: orderData?.cart,
+    shipingAddress: orderData?.shipingAddress,
+    user: user && user,
+    totalPrice: orderData?.totalPrice,
+  };
+
+  // const paymentData = orderData?.totalPrice
+  const paymentData = {
+    amount: Math.round(orderData?.totalPrice * 100),
+  };
+  //card payment handler
+  const cardPaymentHandler = async (e) => {
+    e.preventDefault()
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
+      const { data } = await axios.post(`${server}/payment/process`, paymentData, config)
+      console.log(data)
+
+    const client_secret = data.client_secret
+
+    if (!stripe || !element) return;
+    const result = await stripe.confirmCardPayment(client_secret, {
+      payment_method: {
+        card: element.getElement(CardNumberElement),
+      },
+    });
+
+    if (result.error) {
+      toast.error(result.error.message);
+    } else {
+      if (result.paymentIntent.status === "succeeded") {
+        order.paymnentInfo = {
+          id: result.paymentIntent.id,
+          status: result.paymentIntent.status,
+          type: "Credit Card",
+        };
+
+        await axios
+        .post(`${server}/order/create-order`, order, config)
+        .then((res) => {
+          setOpen(false);
+          navigate("/order/success");
+          toast.success("Order successful!");
+          localStorage.setItem("cartItems", JSON.stringify([]));
+          localStorage.setItem("latestOrder", JSON.stringify([]));
+          window.location.reload();
+        })
+      }
+    }
+  } catch (error) {
+    toast.error(error)
+
+  }
 }
 
 
-const PaymentInfo = ({ user, open, setOpen, onApprove, createOrder, paymentHandler, cashOnDeliveryHandler }) => {
+
+
+
+const onApprove = () => { }
+const payPalPaymentHandler = () => { }
+
+//cash on delivery handler
+const cashOnDeliveryHandler = async(e) => {
+  e.preventDefault()
+  const config =  {
+    headers:{
+      "Content-Type":"application/json"
+    }
+  }
+
+    order.paymnentInfo={
+      type: "Cash On Delivery"
+    }
+
+    await axios.post(`${server}/order/create-order`,order,config).then((res)=>{
+      setOpen(false);
+      navigate("/order/success");
+      toast.success("Order successful!");
+      localStorage.setItem("cartItems", JSON.stringify([]));
+      localStorage.setItem("latestOrder", JSON.stringify([]));
+      window.location.reload();
+    })
+  }
+ 
+
+
+return (
+  <div className="w-full flex flex-col items-center py-8">
+    <div className="w-[90%] 1000px:w-[70%] block 800px:flex">
+      <div className="w-full 800px:w-[65%]">
+        <PaymentInfo
+          user={user}
+          open={open}
+          setOpen={setOpen}
+          onApprove={onApprove}
+          cardPaymentHandler={cardPaymentHandler}
+          payPalPaymentHandler={payPalPaymentHandler}
+          cashOnDeliveryHandler={cashOnDeliveryHandler}
+        />
+      </div>
+      <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
+        <CartData orderData={orderData} />
+      </div>
+    </div>
+  </div>)
+}
+
+
+const PaymentInfo = ({ user, open, setOpen, onApprove, cardPaymentHandler, payPalPaymentHandler, cashOnDeliveryHandler }) => {
   const [select, setSelect] = useState(1)
+
   return (
     <div className="w-full 800px:w-[95%] bg-[#fff] rounded-md p-5 pb-8">
       {/* select buttons */}
@@ -80,7 +172,7 @@ const PaymentInfo = ({ user, open, setOpen, onApprove, createOrder, paymentHandl
         {/* pay with card */}
         {select === 1 ? (
           <div className="w-full flex border-b">
-            <form className="w-full" onSubmit={paymentHandler}>
+            <form className="w-full" onSubmit={cardPaymentHandler}>
               <div className="w-full flex pb-3">
                 <div className="w-[50%]">
                   <label className="block pb-2">Name On Card</label>
@@ -216,7 +308,7 @@ const PaymentInfo = ({ user, open, setOpen, onApprove, createOrder, paymentHandl
                     <PayPalButtons
                       style={{ layout: "vertical" }}
                       onApprove={onApprove}
-                      createOrder={createOrder}
+                      createOrder={payPalPaymentHandler}
                     />
                   </PayPalScriptProvider>
                 </div>
@@ -264,21 +356,21 @@ const CartData = ({ orderData }) => {
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">subtotal:</h3>
-        <h5 className="text-[18px] font-[600]">${/*orderData?.subTotalPrice*/}</h5>
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">Subtotal:</h3>
+        <h5 className="text-[18px] font-[600]">${orderData?.subTotalPrice}</h5>
       </div>
       <br />
       <div className="flex justify-between">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">shipping:</h3>
-        <h5 className="text-[18px] font-[600]">${/*shipping*/}</h5>
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">Shipping:</h3>
+        <h5 className="text-[18px] font-[600]">${orderData?.shipping}</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Discount:</h3>
-        <h5 className="text-[18px] font-[600]">{/*orderData?.discountPrice ? "$" + orderData.discountPrice : "-"*/}</h5>
+        <h5 className="text-[18px] font-[600]">{orderData?.discountPrice ? "$" + orderData.discountPrice : "-"}</h5>
       </div>
       <h5 className="text-[18px] font-[600] text-end pt-3">
-        ${/*orderData?.totalPrice*/}
+        ${orderData?.totalPrice}
       </h5>
       <br />
     </div>

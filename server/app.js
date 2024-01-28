@@ -34,12 +34,16 @@ const shopRoute = require("./controllers/shopController.js")
 const productRoute = require("./controllers/productController.js")
 const eventRoute = require("./controllers/eventController.js")
 const couponCodeRoute = require("./controllers/couponCodeController.js")
+const paymentRoute = require("./controllers/paymentController.js")
+const orderRoute = require("./controllers/orderController.js")
 
 app.use('/api/v2/user', userRoute)
 app.use('/api/v2/shop', shopRoute)
 app.use('/api/v2/product', productRoute)
 app.use('/api/v2/event', eventRoute)
 app.use('/api/v2/couponCode', couponCodeRoute)
+app.use('/api/v2/payment', paymentRoute)
+app.use('/api/v2/order', orderRoute)
 
 
 //middlewares

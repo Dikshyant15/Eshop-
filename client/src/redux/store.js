@@ -5,6 +5,7 @@ import {productReducer} from "./reducers/product"
 import {eventReducer} from "./reducers/event"
 import {wishlistReducer} from "./reducers/wishlist"
 import {cartReducer} from "./reducers/cart"
+import {orderReducer} from "./reducers/order"
 
 const Store = configureStore({
     reducer:{
@@ -13,7 +14,8 @@ const Store = configureStore({
         event:eventReducer,
         product:productReducer,
         cart: cartReducer,
-        wishlist:wishlistReducer
+        wishlist:wishlistReducer,
+        order:orderReducer
     }
 })
 
