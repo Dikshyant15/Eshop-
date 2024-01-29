@@ -22,6 +22,7 @@ import {
 import { Country, State } from "country-state-city";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { getAllOrdersOfUser } from "../../redux/actions/order";
 // import { getAllOrdersOfUser } from "../../redux/actions/order";
 
 
@@ -167,10 +168,26 @@ const ProfileContent = ({ active }) => {
 
 const AllOrders = () => {
 
+  const {user} = useSelector((state)=>state.user)
+  const {orders} = useSelector((state)=>state.order)
+  const dispatch = useDispatch()
+
+
+  useEffect(()=>{
+    dispatch(getAllOrdersOfUser(user._id))
+  },[dispatch])
+
 
   const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+    { field: "id", headerName: "Order ID", minWidth: 150, flex: 1 },
 
+    {
+      field: "productName",
+      headerName: "Product Name",
+      minWidth: 130,
+      flex: 0.7,
+
+    },
     {
       field: "status",
       headerName: "Status",
@@ -191,26 +208,42 @@ const AllOrders = () => {
       headerName: "Total",
       type: "number",
       minWidth: 130,
-      flex: 0.8,
+      flex: 0.7,
     },
 
     {
       field: " ",
       flex: 1,
       minWidth: 150,
-      headerName: "",
+      headerName: "Check details",
       type: "number",
       sortable: false,
-
-
-    },
+      renderCell: (params) => {
+        return (
+          <>
+            <Link to={`/user/order/${params.id}`}>
+              <Button>
+                <AiOutlineArrowRight size={20} />
+              </Button>
+            </Link>
+          </>
+        );
+      },
+    }
   ];
 
-  const rows = [
+  const rows = [];
 
-  ];
-
-
+  orders &&
+    orders.forEach((item) => {
+      rows.push({
+        id: item._id,
+        productName:item.cart[0].productName,
+        itemsQty: item.cart.length,
+        total: "US$ " + item.totalPrice,
+        status: item.status,
+      });
+    });
 
   return (
     <div className="pl-8 pt-1 mt-12">

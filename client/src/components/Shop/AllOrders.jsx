@@ -1,57 +1,55 @@
 import Button from '@mui/material/Button';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect } from "react";
-import { AiOutlineDelete, AiOutlineEye,AiOutlineArrowRight } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAllEventsShop } from "../../redux/actions/event";
-import { getAllOrderOfShop } from '../../redux/actions/order';
-// import { deleteProduct } from "../../redux/actions/product";
 // import Loader from "../Layout/Loader";
+import { getAllOrderOfShop } from "../../redux/actions/order";
+import { AiOutlineArrowRight } from "react-icons/ai";
 
+const AllOrders = () => {
+  const { orders, isLoading } = useSelector((state) => state.order);
+  const { seller } = useSelector((state) => state.seller);
 
-const AllEvents = () => {
-  const { seller } = useSelector((state) => state.seller)
-  const { orders } = useSelector((state) => state.order)
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getAllOrderOfShop(seller._id));
+  }, [dispatch]);
 
-  useEffect(
-    ()=>{
-      dispatch(getAllOrderOfShop(seller._id)) 
-    },[dispatch]
-  )
   const columns = [
-    { field: "id", headerName: "Order Id", minWidth: 220, flex: 0.7 },
+    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+
     {
       field: "status",
       headerName: "Status",
-      minWidth: 180,
-      flex: 0.6,
-     
+      minWidth: 130,
+      flex: 0.7,
       cellClassName: (params) => {
         return params.row.status === "Delivered" ? "greenColor" : "redColor";
       },
     },
     {
-      field: "itemQty",
-      headerName: "Item Quantity",
-      minWidth: 100,
-      flex: 0.6,
+      field: "itemsQty",
+      headerName: "Items Qty",
+      type: "number",
+      minWidth: 130,
+      flex: 0.7,
     },
+
     {
       field: "total",
       headerName: "Total",
       type: "number",
-      minWidth: 80,
-      flex: 0.5,
+      minWidth: 130,
+      flex: 0.8,
     },
 
     {
       field: " ",
       flex: 1,
       minWidth: 150,
-      headerName: "View order details",
+      headerName: "",
       type: "number",
       sortable: false,
       renderCell: (params) => {
@@ -68,34 +66,32 @@ const AllEvents = () => {
     },
   ];
 
+  const row = [];
 
-  const rows = [];
-
-  {
-    orders && orders.forEach(element => {
-      rows.push({
-        id: element._id,
-        status: element.status,
-        itemQty: element.cart.length,
-        total: `USD ${element.totalPrice}`,
-      }
-      )
-
-
+  orders &&
+    orders.forEach((item) => {
+      row.push({
+        id: item._id,
+        itemsQty: item.cart.length,
+        total: "US$ " + item.totalPrice,
+        status: item.status,
+      });
     });
-  }
 
   return (
-    <div className=" w-full p-5">
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={10}
-        disableSelectionOnClick
-        autoHeight
-      />
-    </div>
-  )
-}
+    <>
+     
+        <div className="w-full mx-8 pt-1 mt-10 bg-white">
+          <DataGrid
+            rows={row}
+            columns={columns}
+            pageSize={10}
+            disableSelectionOnClick
+            autoHeight
+          />
+        </div>
+    </>
+  );
+};
 
-export default AllEvents
+export default AllOrders;

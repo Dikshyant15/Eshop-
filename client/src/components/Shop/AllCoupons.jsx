@@ -75,7 +75,7 @@ const AllCoupons = () => {
                 field: "Delete",
                 flex: 0.8,
                 minWidth: 120,
-                headerName: "",
+                headerName: "Delete Coupons",
                 type: "number",
                 sortable: false,
                 renderCell: (params) => {

@@ -18,7 +18,8 @@ import {
   ShopPreviewPage,
   PaymentPage,
   CheckoutPage,
-  OrderSuccessPage
+  OrderSuccessPage,
+  OrderDetailsPage
 } from "./route/Routes.js"
 import { AdminDashboardPage } from "./route/AdminRoute.js";
 import Store from "./redux/store.js";
@@ -30,7 +31,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css"
 import axios from 'axios'
 import ProtectedRoute from './route/ProtectedRoute.js'
-import { AllProductPage, CreateEventsPage, ShopDashboardPage, AllEventPage, AllOrderPage, AllCouponPage } from './route/ShopRoute.js'
+import { AllProductPage, CreateEventsPage, ShopDashboardPage, AllEventPage, AllOrderPage, AllCouponPage,ShopOrderDetailsPage } from './route/ShopRoute.js'
 import { ShopHomePage } from './ShopRoute.js'
 import SellerProtectedRoute from './route/SellerProtectedRoute.js'
 import ProtectedAdminRoute from './route/ProtectedAdminRoute.js'
@@ -129,6 +130,14 @@ const App = () => {
              <OrderSuccessPage />
           }
         />
+        <Route
+        path="/user/order/:id"
+        element={
+          <ProtectedRoute>
+            <OrderDetailsPage />
+          </ProtectedRoute>
+        }
+      />
 
 
         {/*Shop Routes */}
@@ -182,6 +191,16 @@ const App = () => {
           path="/shop/preview/:id"
           element={<SellerProtectedRoute><ShopPreviewPage /></SellerProtectedRoute>}
         />
+
+        <Route
+        path="/order/:id"
+        element={
+          <SellerProtectedRoute>
+            <ShopOrderDetailsPage />
+          </SellerProtectedRoute>
+        }
+      />
+       
 
         {/* Admin Routes */}
         <Route

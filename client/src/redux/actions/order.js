@@ -15,3 +15,17 @@ export const getAllOrderOfShop =(shopId)=>async(dispatch)=>{
         })
       }
 }
+export const getAllOrdersOfUser =(userId)=>async(dispatch)=>{
+    try {
+        dispatch({
+          type: "getAllOrderOfUserRequest",
+        })
+        const { data } = await axios.get(`${server}/order/get-shop-orders/${userId}`)
+        dispatch({type:"getAllOrdersOfUserSuccess",payload:data.orders})
+      } catch (error) {
+        dispatch({
+          type: "getAllOrdersOfUserFail",
+          payload: error.response.data.message
+        })
+      }
+}

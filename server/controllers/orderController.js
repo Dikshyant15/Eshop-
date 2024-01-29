@@ -53,6 +53,7 @@ router.post(
 router.get("/get-shop-orders/:shopId", catchAsyncErrors(async (req, res, next) => {
   try {
     const shopId = req.params.shopId
+    console.log(shopId)
     const orders = await Order.find({ "cart.shopId": shopId })
     res.status(200).json({
       success: true,
@@ -64,4 +65,21 @@ router.get("/get-shop-orders/:shopId", catchAsyncErrors(async (req, res, next) =
   }
 
 }))
+
+//get all user order
+router.get("/get-shop-orders/:userId", catchAsyncErrors(async (req, res, next) => {
+  try {
+    const userId = req.params.userId
+    const orders = await Order.find({ "user._id": userId })
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+
+}))
+
 module.exports = router

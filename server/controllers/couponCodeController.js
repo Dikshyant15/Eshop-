@@ -31,7 +31,7 @@ router.post("/create-new-couponCode",isSeller,catchAsyncErrors(async(req,res,nex
 
 router.get("/get-couponCode/:sellerId",isSeller,catchAsyncErrors(async(req,res,next)=>{
     try {
-        const couponCodeBySellerId = await CouponCode.find({id:req.params.sellerId})
+        const couponCodeBySellerId = await CouponCode.find({"shopId":req.params.sellerId})
 
         res.status(201).json({
             success: true,
