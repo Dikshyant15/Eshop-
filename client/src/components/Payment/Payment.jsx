@@ -70,7 +70,7 @@ const Payment = () => {
       toast.error(result.error.message);
     } else {
       if (result.paymentIntent.status === "succeeded") {
-        order.paymnentInfo = {
+        order.paymentInfo = {
           id: result.paymentIntent.id,
           status: result.paymentIntent.status,
           type: "Credit Card",
@@ -110,7 +110,7 @@ const cashOnDeliveryHandler = async(e) => {
     }
   }
 
-    order.paymnentInfo={
+    order.paymentInfo={
       type: "Cash On Delivery"
     }
 

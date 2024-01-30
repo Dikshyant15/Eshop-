@@ -4,19 +4,99 @@ import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
 import { MdBorderClear } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import Button from '@mui/material/Button';
+import Button from '@mui/material/Button';  // Ensure this import is at the top level
 import { DataGrid } from '@mui/x-data-grid';
-import { BsDoorOpenFill } from "react-icons/bs";
-
+import { getAllOrderOfShop } from "../../redux/actions/order";
+import { server } from "../../server";
+import axios from "axios";
 
 const DashboardHero = () => {
     const { seller } = useSelector((state) => state.seller)
     const { allProducts } = useSelector((state) => state.product)
+    const { product } = useSelector((state) => state.product)
+    const { orders } = useSelector((state) => state.order)
+    const[latestOrder,setLatestOrder]= useState([])
+
+    const getAllLatestOrders = async(shopId)=>{
+        await axios.get(`${server}/order/get-latest-order-shop/${shopId}`).then((res)=>{
+            setLatestOrder(res.data.latestOrders)
+        })
+    }
+
+    useEffect(()=>{
+        getAllOrderOfShop(seller._id)
+        getAllLatestOrders(seller._id)
+    },[seller._id])
 
     const columns = [
-        { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-    ]
+        { field: "id", headerName: "Order ID", minWidth: 150, flex: 1},
+        {/*
+          field: "productName",
+          headerName: "Product Name",
+          minWidth: 130,
+          flex: 0.7,
+      */},
+    
+        {
+          field: "status",
+          headerName: "Status",
+          minWidth: 130,
+          flex: 0.7,
+          cellClassName: (params) => {
+            return params.row.status === "Delivered" ? "greenColor" : "redColor";
+          },
+        },
+        {
+          field: "itemsQty",
+          headerName: "Items Qty",
+          type: "number",
+          minWidth: 130,
+          flex: 0.7,
+        },
+    
+    
+        {
+          field: "total",
+          headerName: "Total",
+          type: "number",
+          minWidth: 130,
+          flex: 0.8,
+        },
+    
+        {
+          field: " View Order Details",
+          flex: 1,
+          minWidth: 150,
+          headerName: "",
+          type: "number",
+          sortable: false,
+          renderCell: (params) => {
+            return (
+              <>
+                <Link to={`/order/${params.id}`}>
+                  <Button>
+                    <AiOutlineArrowRight size={20} />
+                  </Button>
+                </Link>
+              </>
+            );
+          },
+        },
+      ];
+    
     const rows = []
+
+    {latestOrder &&
+        latestOrder.forEach((item) => {
+      rows.push({
+        id: item._id,
+        itemsQty: item.cart.length,
+        // productName:item.cart.productName,
+        total: "US$ " + item.totalPrice,
+        status: item.status,
+      });
+    })
+};
 
     return (
         <div className="w-full p-8">
@@ -54,7 +134,7 @@ const DashboardHero = () => {
                             All Orders
                         </h3>
                     </div>
-                    <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">orders</h5>
+                    <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{orders && orders.length}</h5>
                     <Link to="/dashboard-orders">
                         <h5 className="pt-4 pl-2 text-[#077f9c]">View Orders</h5>
                     </Link>
@@ -73,7 +153,7 @@ const DashboardHero = () => {
                             All Products
                         </h3>
                     </div>
-                    <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{allProducts&& allProducts.length}</h5>
+                    <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{product && product.length}</h5>
                     <Link to="/dashboard-products">
                         <h5 className="pt-4 pl-2 text-[#077f9c]">View Products</h5>
                     </Link>

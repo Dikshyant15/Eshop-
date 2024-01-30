@@ -18,7 +18,13 @@ const AllOrders = () => {
   }, [dispatch]);
 
   const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+    { field: "id", headerName: "Order ID", minWidth: 150, flex: 1},
+    {/*
+      field: "productName",
+      headerName: "Product Name",
+      minWidth: 130,
+      flex: 0.7,
+  */},
 
     {
       field: "status",
@@ -37,6 +43,7 @@ const AllOrders = () => {
       flex: 0.7,
     },
 
+
     {
       field: "total",
       headerName: "Total",
@@ -46,7 +53,7 @@ const AllOrders = () => {
     },
 
     {
-      field: " ",
+      field: " View Order Details",
       flex: 1,
       minWidth: 150,
       headerName: "",
@@ -73,6 +80,7 @@ const AllOrders = () => {
       row.push({
         id: item._id,
         itemsQty: item.cart.length,
+        // productName:item.cart.productName,
         total: "US$ " + item.totalPrice,
         status: item.status,
       });
@@ -80,7 +88,7 @@ const AllOrders = () => {
 
   return (
     <>
-     
+
         <div className="w-full mx-8 pt-1 mt-10 bg-white">
           <DataGrid
             rows={row}

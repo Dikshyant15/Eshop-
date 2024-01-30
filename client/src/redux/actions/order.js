@@ -20,7 +20,7 @@ export const getAllOrdersOfUser =(userId)=>async(dispatch)=>{
         dispatch({
           type: "getAllOrderOfUserRequest",
         })
-        const { data } = await axios.get(`${server}/order/get-shop-orders/${userId}`)
+        const { data } = await axios.get(`${server}/order/get-user-orders/${userId}`)
         dispatch({type:"getAllOrdersOfUserSuccess",payload:data.orders})
       } catch (error) {
         dispatch({

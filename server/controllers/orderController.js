@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router()
 const catchAsyncErrors = require("../Middlewares/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler")
+const { isSeller } = require("../Middlewares/auth")
 const Order = require("../models/Order")
 const Shop = require("../models/Shop");
 const Product = require("../models/Products");
@@ -53,7 +54,6 @@ router.post(
 router.get("/get-shop-orders/:shopId", catchAsyncErrors(async (req, res, next) => {
   try {
     const shopId = req.params.shopId
-    console.log(shopId)
     const orders = await Order.find({ "cart.shopId": shopId })
     res.status(200).json({
       success: true,
@@ -66,20 +66,50 @@ router.get("/get-shop-orders/:shopId", catchAsyncErrors(async (req, res, next) =
 
 }))
 
-//get all user order
-router.get("/get-shop-orders/:userId", catchAsyncErrors(async (req, res, next) => {
+//get all latest shop order
+router.get("/get-latest-order-shop/:shopId", catchAsyncErrors(async (req, res, next) => {
   try {
+    const shopId = req.params.shopId
+    const latestOrders = await Order.find({ "cart.shopId": shopId }).sort({createdAt:-1})
+    res.status(200).json({
+      success: true,
+      latestOrders,
+    });
+
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+}))
+
+  
+  //get all user order
+  router.get("/get-user-orders/:userId", catchAsyncErrors(async (req, res, next) => {
+    try {
     const userId = req.params.userId
     const orders = await Order.find({ "user._id": userId })
     res.status(200).json({
       success: true,
       orders,
     });
-
-  } catch (error) {
+   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
-
-}))
+  }))
+  //update user order status
+  router.get("/update-order-status/:orderId",isSeller, catchAsyncErrors(async (req, res, next) => {
+    try {
+    const orderId = req.params.orderId
+    const order = await Order.findById(orderId)
+    if(!order){
+      return next(new ErrorHandler("Order not available", 400));
+    }
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+   } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+  }))
 
 module.exports = router
