@@ -19,13 +19,6 @@ const AllOrders = () => {
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 1},
-    {/*
-      field: "productName",
-      headerName: "Product Name",
-      minWidth: 130,
-      flex: 0.7,
-  */},
-
     {
       field: "status",
       headerName: "Status",
@@ -53,16 +46,16 @@ const AllOrders = () => {
     },
 
     {
-      field: " View Order Details",
+      field: "",
       flex: 1,
       minWidth: 150,
-      headerName: "",
-      type: "number",
+      headerName: " View Order Details",
+       type: "number",
       sortable: false,
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/order/${params.id}`}>
+            <Link to={`/shop/order/${params.id}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -70,21 +63,24 @@ const AllOrders = () => {
           </>
         );
       },
-    },
+    }
   ];
+
 
   const row = [];
 
-  orders &&
+ { orders &&
     orders.forEach((item) => {
       row.push({
         id: item._id,
+        status: item.status,
         itemsQty: item.cart.length,
         // productName:item.cart.productName,
         total: "US$ " + item.totalPrice,
-        status: item.status,
-      });
-    });
+      })
+  })
+}
+      
 
   return (
     <>
@@ -103,3 +99,4 @@ const AllOrders = () => {
 };
 
 export default AllOrders;
+

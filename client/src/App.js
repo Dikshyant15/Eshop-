@@ -193,7 +193,7 @@ const App = () => {
         />
 
         <Route
-        path="/order/:id"
+        path="/shop/order/:id"
         element={
           <SellerProtectedRoute>
             <ShopOrderDetailsPage />

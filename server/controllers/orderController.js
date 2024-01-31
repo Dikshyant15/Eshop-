@@ -70,7 +70,7 @@ router.get("/get-shop-orders/:shopId", catchAsyncErrors(async (req, res, next) =
 router.get("/get-latest-order-shop/:shopId", catchAsyncErrors(async (req, res, next) => {
   try {
     const shopId = req.params.shopId
-    const latestOrders = await Order.find({ "cart.shopId": shopId }).sort({createdAt:-1})
+    const latestOrders = await Order.find({ "cart.shopId": shopId }).sort({ createdAt: -1 })
     res.status(200).json({
       success: true,
       latestOrders,
@@ -81,35 +81,58 @@ router.get("/get-latest-order-shop/:shopId", catchAsyncErrors(async (req, res, n
   }
 }))
 
-  
-  //get all user order
-  router.get("/get-user-orders/:userId", catchAsyncErrors(async (req, res, next) => {
-    try {
+
+//get all user order
+router.get("/get-user-orders/:userId", catchAsyncErrors(async (req, res, next) => {
+  try {
     const userId = req.params.userId
     const orders = await Order.find({ "user._id": userId })
     res.status(200).json({
       success: true,
       orders,
     });
-   } catch (error) {
+  } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
-  }))
-  //update user order status
-  router.get("/update-order-status/:orderId",isSeller, catchAsyncErrors(async (req, res, next) => {
-    try {
+}))
+
+router.put("/update-order-status/:orderId", isSeller, catchAsyncErrors(async (req, res, next) => {
+  try {
     const orderId = req.params.orderId
     const order = await Order.findById(orderId)
-    if(!order){
+    if (!order) {
       return next(new ErrorHandler("Order not available", 400));
     }
+
+    // if status is transferred to delivery partner 
+    if (req.body.status === "Transferred to delivery partner") {
+      order.cart.forEach(async (o) => {
+        const orderID = o._id
+        // console.log(orderID)
+        const qty = o.qty
+        // console.log(qty)
+        await updateProductCount(orderID, qty);
+    })
+    order.status = req.body.status //not saved in the database 
     res.status(200).json({
       success: true,
-      orders,
+      order,
     });
-   } catch (error) {
+
+    // update user order status
+    async function updateProductCount(id, qty) {
+      const product = await Product.findById(id);
+
+      product.stock -= qty;
+      product.sold_out += qty;
+
+      await product.save({ validateBeforeSave: false });
+    }}
+    await order.save({validateBeforeSave:false})
+  } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
-  }))
+}));
+
 
 module.exports = router

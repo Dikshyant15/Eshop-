@@ -181,13 +181,13 @@ const AllOrders = () => {
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 1 },
 
-    {
-      field: "productName",
-      headerName: "Product Name",
-      minWidth: 130,
-      flex: 0.6,
+    // {
+    //   field: "productName",
+    //   headerName: "Product Name",
+    //   minWidth: 130,
+    //   flex: 0.6,
 
-    },
+    // },
     {
       field: "status",
       headerName: "Status",
@@ -238,7 +238,7 @@ const AllOrders = () => {
     orders.forEach((item) => {
       rows.push({
         id: item._id,
-        productName:item.cart[0].productName,
+        // productName:item.cart[0].productName,
         itemsQty: item.cart.length,
         total: "US$ " + item.totalPrice,
         status: item.status,
