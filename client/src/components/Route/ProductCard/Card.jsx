@@ -15,6 +15,8 @@ import { toast } from "react-toastify"
 import { addToCart } from '../../../redux/actions/cart';
 import { addToWishlist } from '../../../redux/actions/wishlist';
 import { removeFromWishlist } from '../../../redux/actions/wishlist';
+import Rating from '../../Products/Rating';
+
 
 const Card = ({ data }) => {
     const [click, setClick] = useState(true)
@@ -109,8 +111,10 @@ const Card = ({ data }) => {
                 <p class="text-gray-700 text-base">
                     Sold Out: {data.sold_out}
                 </p>
-            </div>
-
+                </div>
+                <div class="px-6 py-4">
+                    <Rating rating={data?.rating}/>
+                </div>
             <div class="px-6 pt-4 pb-2 ">
                 {click ?
                     (<span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 cursor-pointer">

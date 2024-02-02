@@ -3,7 +3,8 @@ import {createReducer} from "@reduxjs/toolkit"
 const initialState = {
     isLoading:true,
     orders:null,
-    error:null
+    error:null,
+    allOrders:null
 }
 
 export const orderReducer = createReducer(initialState,{
@@ -28,6 +29,18 @@ export const orderReducer = createReducer(initialState,{
         state.orders=action.payload
     },
     getAllOrdersOfUserFail:(state,action)=>{
+        state.isLoading = false
+        state.error=action.payload
+    },
+    //get all order for admin
+    getAllOrderForAdminRequest:(state)=>{
+        state.isLoading=true 
+    },
+    getAllOrderForAdminSuccess:(state,action)=>{
+        state.isLoading = false
+        state.allOrders=action.payload
+    },
+    getAllOrderForAdminFail:(state,action)=>{
         state.isLoading = false
         state.error=action.payload
     }

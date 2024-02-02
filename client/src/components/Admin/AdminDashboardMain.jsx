@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../../styles/styles'
 import { AiOutlineArrowRight, AiOutlineMoneyCollect } from "react-icons/ai";
 import { FiShoppingBag } from "react-icons/fi";
@@ -11,11 +11,75 @@ import AllUser from './AllUser';
 import AllProduct from './AllProduct';
 import AllSeller from './AllSeller';
 import AllEvent from './AllEvent';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllOrdersForAdmin } from '../../redux/actions/order';
 
 const AdminDashboardMain = ({ active }) => {
+  const {allOrders} = useSelector((state)=>state.order)
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    dispatch(getAllOrdersForAdmin())
+  },[dispatch])
+
+  const column = [
+    { field: "id", headerName: "Order ID", minWidth: 150, flex: 1},
+    {
+      field: "shopName",
+      headerName: "Shop Name",
+      minWidth: 120,
+      flex: 0.7,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      minWidth: 120,
+      flex: 0.7,
+      cellClassName: (params) => {
+        return params.row.status === "Delivered" ? "greenColor" : "redColor";
+      },
+    },
+    {
+      field: "itemsQty",
+      headerName: "Items Qty",
+      type: "number",
+      minWidth: 120,
+      flex: 0.7,
+    },
+
+
+    {
+      field: "createdAt",
+      headerName: "Order Date",
+      minWidth: 120,
+      flex: 0.7,
+    },
+    {
+      field: "total",
+      headerName: "Total",
+      type: "number",
+      minWidth: 120,
+      flex: 0.7,
+    },
+
+   
+    
+  ];
   const row = []
-  const columns = []
+
+  { allOrders &&
+    allOrders.forEach((item) => {
+      row.push({
+        id: item._id,
+        status: item.status,
+        shopName:item?.cart?.reduce((acc, item) => item.shop.name, 0),
+        itemsQty: item?.cart?.reduce((acc, item) => acc + item.qty, 0),
+        // productName:item.cart.productName,
+        total: "US$ " + item.totalPrice,
+        createdAt:item.createdAt.slice(0,10)
+      })
+  })
+}
   
 
   const { sellers } = useSelector((state)=> state.seller)
@@ -68,7 +132,7 @@ const AdminDashboardMain = ({ active }) => {
                     All Orders
                   </h3>
                 </div>
-                <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">no of orders</h5>
+                <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{allOrders&&allOrders.length}</h5>
                 <Link to="/admin-orders">
                   <h5 className="pt-4 pl-2 text-[#077f9c]">View Orders</h5>
                 </Link>
@@ -80,7 +144,7 @@ const AdminDashboardMain = ({ active }) => {
             <div className="w-full min-h-[45vh] bg-white rounded">
               <DataGrid
                 rows={row}
-                columns={columns}
+                columns={column}
                 pageSize={4}
                 disableSelectionOnClick
                 autoHeight
@@ -94,8 +158,7 @@ const AdminDashboardMain = ({ active }) => {
       {active && active === 4 ? (<div><AllProduct /></div>) : ""}
       {active && active === 5 ? (<div><AllSeller /></div>) : ""}
       {active && active === 6 ? (<div><AllEvent/></div>) : ""}
-      {/*active && active === 7 ? (<div><AllOrder /></div>) : ""}
-        {active && active === 8 ? (<div><AllOrder /></div>) : ""*/}
+      {/*active && active === 7 ? (<div><AllOrder /></div>) : ""*/}
     </div>
 
   )

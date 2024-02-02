@@ -118,3 +118,18 @@ export const deleteUserAddress = (id) => async (dispatch) => {
     });
   }
 }
+//admin get all order
+export const getAllOrdersForAdmin =()=>async(dispatch)=>{
+  try {
+      dispatch({
+        type: "getAllOrderForAdminRequest",
+      })
+      const { data } = await axios.get(`${server}/user/admin-get-all-order`)
+      dispatch({type:"getAllOrderForAdminSuccess",payload:data.allOrders})
+    } catch (error) {
+      dispatch({
+        type: "getAllOrderForAdminFail",
+        payload: error.response.data.message
+      })
+    }
+}

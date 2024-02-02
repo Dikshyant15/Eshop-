@@ -29,3 +29,17 @@ export const getAllOrdersOfUser =(userId)=>async(dispatch)=>{
         })
       }
 }
+export const getAllOrdersForAdmin =()=>async(dispatch)=>{
+    try {
+        dispatch({
+          type: "getAllOrderForAdminRequest",
+        })
+        const { data } = await axios.get(`${server}/order/admin-get-all-order`,{withCredentials:true})
+        dispatch({type:"getAllOrderForAdminSuccess",payload:data.allOrders})
+      } catch (error) {
+        dispatch({
+          type: "getAllOrderForAdminFail",
+          payload: error.response.data.message
+        })
+      }
+}

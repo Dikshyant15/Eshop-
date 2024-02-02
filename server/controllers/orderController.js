@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router()
 const catchAsyncErrors = require("../Middlewares/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler")
-const { isSeller } = require("../Middlewares/auth")
+const { isSeller, isAdmin, isAuthenticated } = require("../Middlewares/auth")
 const Order = require("../models/Order")
 const Shop = require("../models/Shop");
 const Product = require("../models/Products");
@@ -112,7 +112,19 @@ router.put("/update-order-status/:orderId", isSeller, catchAsyncErrors(async (re
         const qty = o.qty
         // console.log(qty)
         await updateProductCount(orderID, qty);
-    })
+      })
+    }
+    if (order.status === "Delivered") {
+      order.deliveredAt = Date.now()
+      order.paymentInfo.status = "Payment Succeded"
+      //for updating seller info 
+      const serviceCharge = order.totalPrice * 0.1
+      
+      console.log(serviceCharge)
+      const availablePriceAfterServiceCharge = order.totalPrice - serviceCharge
+      console.log(availablePriceAfterServiceCharge)
+      await updateSellerInfo(availablePriceAfterServiceCharge)
+    }
     order.status = req.body.status //not saved in the database 
     res.status(200).json({
       success: true,
@@ -127,12 +139,36 @@ router.put("/update-order-status/:orderId", isSeller, catchAsyncErrors(async (re
       product.sold_out += qty;
 
       await product.save({ validateBeforeSave: false });
-    }}
-    await order.save({validateBeforeSave:false})
-  } catch (error) {
+    }
+
+    //update seller info 
+    async function updateSellerInfo(amount) {
+      const shop = await Shop.findById(req.seller.id)
+      shop.availableBalance += amount
+      await shop.save()
+
+    }
+    await order.save({ validateBeforeSave: false })
+  }
+  catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
 }));
+
+//admin get all orders
+router.get("/admin-get-all-order",isAuthenticated,isAdmin("Admin"),catchAsyncErrors(async(req,res,next)=>{
+  try {
+    const allOrders = await Order.find().sort({createdAt:-1})
+    res.status(200).json({
+      success: true,
+      allOrders,
+    });
+    
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+  
+}))
 
 
 module.exports = router
