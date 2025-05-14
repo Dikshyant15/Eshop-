@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from "../../redux/actions/cart";
 import { Rating } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
+
 
 
 //comment section and wishlist checker on page load left
@@ -34,7 +36,7 @@ const ProductDetails = ({ data }) => {
   )
 
   const totalRatings = product && product.reduce((acc, product) =>
-    acc + product.reviews.reduce((sum, rating) => sum + rating.sum(), 0),0
+    acc + product.reviews.reduce((sum, rating) => sum + rating.sum(), 0), 0
   )
 
   const averageRating = totalRatings / totalReviewsLength
@@ -170,7 +172,7 @@ const ProductDetails = ({ data }) => {
 
 
 
-                 
+
                   <div className='mr-12'>
                     {click ? (
                       <AiFillHeart
@@ -195,11 +197,11 @@ const ProductDetails = ({ data }) => {
             </div>
           </div>
           <ProductDetailsInfo
-          data={data}
-          product={product}
-          totalReviewsLength={totalReviewsLength}
-          averageRating={averageRating}
-        />
+            data={data}
+            product={product}
+            totalReviewsLength={totalReviewsLength}
+            averageRating={averageRating}
+          />
         </div>
 
       ) : null}
@@ -288,10 +290,15 @@ const ProductDetailsInfo = ({
               </div>
             ))}
 
-          <div className="w-full flex justify-center">
-            {data && data.reviews.length === 0 && (
-              <h5>No Reviews have for this product!</h5>
-            )}
+          <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
+            <div className="text-left">
+              {data && data.reviews.length === 0 && (
+                <div className="flex ">
+                  <h5>No Reviews have for this product!</h5>
+                  <button className="bg-neutral-900 text-white rounded border-indigo-600 text-2xl" >Give a review </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ) : null}

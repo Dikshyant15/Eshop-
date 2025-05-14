@@ -44,14 +44,14 @@ const AllUser = () => {
           name: item.name,
           email: item.email,
           role: item.role,
-          joinedAt: item.createdAt
+          joinedAt: item.createdAt.slice(0,10)
         })
 
 
       })
   }
   const column = [
-    { field: "id", headerName: "User ID", minWidth: 205 },
+    { field: "id", headerName: "User ID", minWidth: 220 },
 
     {
       field: "name",
@@ -63,7 +63,7 @@ const AllUser = () => {
       field: "email",
       headerName: "Email",
       type: "text",
-      minWidth: 205,
+      minWidth: 220,
 
     },
     {
@@ -84,7 +84,7 @@ const AllUser = () => {
 
     {
       field: " ",
-      minWidth: 205,
+      minWidth: 185,
       type: "number",
       headerName: "Delete User",
       renderCell: (params) => {

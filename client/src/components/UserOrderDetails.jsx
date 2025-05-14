@@ -101,12 +101,12 @@ const UserOrderDetails = () => {
 
               <div className="border-t w-full text-right">
               <h5 className="pt-3 text-[18px]">
-                {/*Total Price: <strong> $ {data?.totalPrice}</strong>  user total price */}
                 <span>Unit price: {`${item.discountPrice}` * `${item.qty}`}</span>
                 </h5>
             </div>
             </div>
-            {!item.isReviewed && data?.status === "Delivered" ?  <div
+            {!item.isReviewed && data?.status === "Delivered" ?  
+            <div
                 className={`${styles.button} text-[#fff]`}
                 onClick={() => setOpen(true) || setSelectedItem(item)}
               >
@@ -140,7 +140,7 @@ const UserOrderDetails = () => {
                 className="w-[80px] h-[80px]"
               />
               <div>
-                <div className="pl-3 text-[20px]">{selectedItem?.name}</div>
+                <div className="pl-3 text-[20px]">{selectedItem?.productName}</div>
                 <h4 className="pl-3 text-[20px]">
                   US${selectedItem?.discountPrice} x {selectedItem?.qty}
                 </h4>
