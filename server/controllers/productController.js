@@ -69,6 +69,26 @@ router.get("/get-all-products",catchAsyncErrors(async(req,res,next)=>{
         
     }
 }))
+//create new product review
+router.get("/create-new-review",catchAsyncErrors(async(req,res,next)=>{
+    try {
+        const{user,
+        rating,
+        comment,
+        productId,
+        orderId } = req.body
+
+        
+
+        res.status(200).json({success:true,products})
+        console.log(products)
+        
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400));
+
+        
+    }
+}))
 
 //admin get all product
 router.get("/admin-get-all-product",catchAsyncErrors(async(req,res,next)=>{
